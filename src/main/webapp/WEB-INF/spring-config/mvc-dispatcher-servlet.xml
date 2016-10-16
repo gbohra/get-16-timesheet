@@ -6,11 +6,12 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
 	<!-- <context:component-scan base-package="com.metacube.empmgmt"/> -->
-	<context:component-scan base-package="com.timesheet.dao" />
-	<context:component-scan base-package="com.timesheet.controller" />
-	
+	<context:component-scan base-package="com.timesheet" />
+	<!-- <context:component-scan base-package="com.timesheet.controller" /> -->
+	<!-- <context:component-scan base-package="com.timesheet.service" /> <context:component-scan 
+		base-package="com.timesheet.dao.model" /> -->
 	<mvc:annotation-driven />
-
+	<context:annotation-config />
 	<!-- <mvc:resources mapping="/_ui/**" location="/ui/theme_default/" /> -->
 
 	<bean
@@ -36,6 +37,9 @@
 
 	</bean>
 
+
+
+
 	<bean id="hibernate4AnnotatedSessionFactory"
 		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
 		<property name="dataSource" ref="dataSource" />
@@ -53,12 +57,16 @@
 			</props>
 		</property>
 	</bean>
-
-	<bean id="userDAO" class="com.timesheet.dao.UserDAO">
-		<property name="sessionFactory"
-			ref="hibernate4AnnotatedSessionFactory" />
+	<!-- <bean id="labeldao" class="com.timesheet.dao.LabelDaoImpl">
+		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</bean>
-	
+
+	<bean id="labelservice" class="com.timesheet.service.LabelService">
+		<property name="labeldao" ref="labeldao"></property>
+	</bean>
+ -->
+
+
 	<bean id="transactionManager"
 		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
 		<property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />

@@ -1,1 +1,1 @@
-All the bussiness exception and system exception are here 
+All the bussiness exception and system exception are here  
