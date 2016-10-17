@@ -18,11 +18,11 @@ public class LabelModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
-	private long Updated_by;
-	private long Created_by;
+	private long updated_by;
+	private long created_by;
 
-	private Date Created_date;
-	private Date Updated_date;
+	private Date created_date;
+	private Date updated_date;
 
 	public long getId() {
 		return id;
@@ -41,35 +41,35 @@ public class LabelModel {
 	}
 
 	public long getUpdated_by() {
-		return Updated_by;
+		return updated_by;
 	}
 
 	public void setUpdated_by(long updated_by) {
-		Updated_by = updated_by;
+		updated_by = updated_by;
 	}
 
 	public long getCreated_by() {
-		return Created_by;
+		return created_by;
 	}
 
 	public void setCreated_by(long created_by) {
-		Created_by = created_by;
+		created_by = created_by;
 	}
 
 	public Date getCreated_date() {
-		return Created_date;
+		return created_date;
 	}
 
 	public void setCreated_date(Date created_date) {
-		Created_date = created_date;
+		created_date = created_date;
 	}
 
 	public Date getUpdated_date() {
-		return Updated_date;
+		return updated_date;
 	}
 
 	public void setUpdated_date(Date updated_date) {
-		Updated_date = updated_date;
+		updated_date = updated_date;
 	}
 
 }
