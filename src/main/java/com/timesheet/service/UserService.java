@@ -1,6 +1,9 @@
 package com.timesheet.service;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.timesheet.dao.UserDao;
 import com.timesheet.dao.model.UserModel;
 @Service
@@ -53,6 +56,7 @@ public class UserService {
 	 * @return  true if update successfully,else false
 	 */
 	public boolean update(UserModel user){
+		System.out.println("this is user service update");
 		return userDao.update(user);
 	}
 	
@@ -62,8 +66,9 @@ public class UserService {
 	 * @param id - users id
 	 * @return - UserModel if user present 
 	 */
-	public UserModel getUserData(int id){
-		System.out.println("this is get uxr kjv");
+	@SuppressWarnings("rawtypes")
+	public List getUserData(int id){
+		System.out.println("this is usre service");
 		return userDao.getUserInfo(id);
 	}
 	
