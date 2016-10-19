@@ -3,7 +3,6 @@ package com.timesheet.dao;
 //import all required classes
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,25 +106,7 @@ public class ProjectDao {
 	 * @return ProjectModel : project model having id equal to requested id
 	 */
 	public ProjectModel getProjectById(long id) {
-		Session session = this.sessionFactory.getCurrentSession();
+		Session session = sessionFactory.getCurrentSession();
 		return (ProjectModel) session.get(ProjectModel.class, id);
 	}
-	/**
-	 * This return project's list of a user
-	 * @param id - user id;
-	 * @return project's list
-	 */
-	@SuppressWarnings("rawtypes")
-	public List getProjectByUserId(int id){
-		Session session = this.sessionFactory.getCurrentSession();
-		try{
-			String hql = "FROM ProjectModel P WHERE createdBy = :id";
-			Query query = session.createQuery(hql);
-			List list = query.list();
-			return list;
-		}catch(Exception e){
-			return null;
-		}
-	}
-	
 }

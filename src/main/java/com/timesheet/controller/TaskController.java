@@ -6,13 +6,14 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.Task;
 import com.timesheet.service.TaskService;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
 @RequestMapping(value="/timesheet/task")
 public class TaskController {
@@ -39,6 +40,7 @@ public class TaskController {
 	@RequestMapping(value="/getUser/{id}")
 	@ResponseBody
 	public List getUserTask(@PathVariable int userId){
+		
 		return taskService.getUserTask(userId);
 	}
 	/**

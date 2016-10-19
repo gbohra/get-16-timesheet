@@ -116,5 +116,25 @@ public class UserDao {
 		}
 	}
 	
+	public int checkEmail(String email){
+		Session session = this.sessionFactory.getCurrentSession();
+		try{
+			String hql = "id FROM User u WHERE u.email=:email";
+			Query query = session.createQuery(hql);
+			query.setParameter("email", email);
+			List list = query.list();
+			if(list.size() > 0){
+				System.out.println("this is list's 0th element"+list.get(0));
+				return (int) list.get(0);
+			}
+			else{
+				return 0;
+			}
+			
+		}
+		catch(Exception e){
+			return -1;
+		}
+	}
 
 }

@@ -66,8 +66,8 @@ public class TaskDao {
 	public List getUserTaskByDate(int userId,Date date){
 		System.out.println("this is user dao ");
 		Session session = this.sessionFactory.getCurrentSession();	
-		String hql = "FROM Task t where t.createdBy = 1 and (DATEDIFF(DATE_ADD(createdDate,INTERVAL repeatFrequency DAY),createdDate) >  0)";
-		//String hql = "FROM Task";
+		//String hql = "FROM Task t where createdBy = 1 and (DATEDIFF(DATE_ADD(createdDate,INTERVAL repeatFrequency DAY),createdDate) >  0)";
+		String hql = "FROM Task";
 		try{
 			Query query = session.createQuery(hql);
 			System.out.println("hql is executrd");
