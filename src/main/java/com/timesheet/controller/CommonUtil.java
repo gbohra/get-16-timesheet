@@ -17,7 +17,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  *
  */
 @CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping(value="api/v1/commonUtil")
+@RequestMapping(value="/api/v1/commonUtil")
 public class CommonUtil {
 	
 	@RequestMapping(value="/getDate")

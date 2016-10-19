@@ -46,16 +46,17 @@ public class TaskDao {
 	 * @param userId - user's id
 	 * @return - list of user's task
 	 */
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List getTask(int userId){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "FROM Task T WHERE T.created_by = :id";
+			String hql = "FROM Task T WHERE T.createdBy = :id";
 			Query query = session.createQuery(hql);
 			query.setParameter("id", userId);
-			List list = query.list();
+			List list =query.list() ;
 			 return list;
 		}catch(Exception e){
+			e.printStackTrace();
 			return null;
 		}
 	}
@@ -69,7 +70,7 @@ public class TaskDao {
 	@SuppressWarnings("rawtypes")
 	public List getUserTaskByDate(int userId,Date date){
 		Session session = this.sessionFactory.getCurrentSession();	
-		String hql = "FROM Task t where createdBy = :id and (DATEDIFF(DAY,DATE_ADD(createdDate,INTERVAL repeatFrequency DAY),:date) >  0)";
+		String hql = "FROM Task t where t.createdBy = :id and (DATEDIFF(DAY,DATE_ADD(createdDate,INTERVAL repeatFrequency DAY),:date) >  0)";
 		try{
 			Query query = session.createQuery(hql);
 			query.setParameter("id", userId);

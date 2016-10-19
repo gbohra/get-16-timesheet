@@ -36,7 +36,7 @@ public class OrganizationService {
 	 * This method is use to insert User object in data base 
 	 * @param organization
 	 */
-	public boolean addOrganizaion(Organization organization){
+	public Organization addOrganizaion(Organization organization){
 		return organizationDao.addOrganization(organization);
 	}
 	
@@ -46,8 +46,27 @@ public class OrganizationService {
 	 * @return List of Organization
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Organization> getUserOrganization(int id){
-		return organizationDao.getUserOrganization(id);
+	public List<Organization> getOrganizations(){
+		return organizationDao.getOrganizations();
+	}
+	
+	/**
+	 * This method is use to get all organization from the user
+	 * @param id -- user's id
+	 * @return List of Organization
+	 */
+	public Organization updateOrganization(Organization o){
+		return organizationDao.updateOrganization(o);
+	}
+	
+	/**
+	 * This method is use to get all organization from the user
+	 * @param id -- user's id
+	 * @return List of Organization
+	 */
+	@SuppressWarnings("unchecked")
+	public Organization getOrganization(int id){
+		return organizationDao.getOrganization(id);
 	}
 	
 	/**

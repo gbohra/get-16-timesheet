@@ -32,13 +32,13 @@ public class Organization {
 	private String contact;
 
 	@Column(name = "created_by")
-	private String createdBy;
+	private int createdBy;
 
 	@Column(name = "created_date")
 	private Date createdDate;
 
 	@Column(name = "updated_by")
-	private String updatedBy;
+	private int updatedBy;
 
 	@Column(name = "updated_date")
 	private Date updatedDate;
@@ -75,11 +75,11 @@ public class Organization {
 		this.contact = contact;
 	}
 
-	public String getCreatedBy() {
+	public int getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(String createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
 
@@ -91,11 +91,11 @@ public class Organization {
 		this.createdDate = createdDate;
 	}
 
-	public String getUpdatedBy() {
+	public int getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(String updatedBy) {
+	public void setUpdatedBy(int updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

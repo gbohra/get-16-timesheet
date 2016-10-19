@@ -23,7 +23,7 @@ import com.timesheet.service.LabelService;
 //use for cross origin request
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping("api/v1/label")
+@RequestMapping("/api/v1/label")
 public class LabelController {
 	
 	@Autowired

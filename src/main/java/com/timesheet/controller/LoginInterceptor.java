@@ -28,12 +28,10 @@ public class LoginInterceptor extends GenericFilterBean {
 			
 			String email = (String)session.getAttribute("email");
 			if (session == null || email == null) {
-
 				httpResponse.sendRedirect("");
 			}
 			filterChain.doFilter(request, response);
 		} catch(NullPointerException npe) {
-			
 			httpResponse.sendRedirect("");
 		}
 	}

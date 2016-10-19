@@ -31,30 +31,71 @@ public class OrganizationDao {
 	 * @param organization -- organization object
 	 * @return true if successfully added else return false
 	 */
-	public boolean addOrganization(Organization organization){
+	public Organization addOrganization(Organization organization){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
 			session.save(organization);
-			return true;
+			return organization;
 		}catch(Exception e){
-			return false;
+			return null;
 		}
 	}
+	/**
+	 * 
+	 * @param 
+	 * @return List of organization
+	 */
+	@SuppressWarnings("rawtypes")
+	public List getOrganizations(){
+		Session session = this.sessionFactory.getCurrentSession();
+		try{
+			String hql = "From Organization";
+			Query query = session.createQuery(hql);
+//			query.setParameter("user_id", id);
+			System.out.println(query.list());
+			List list = query.list() ;
+			
+			return list;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param organization to update
+	 * @return organization
+	 */
+	public Organization updateOrganization(Organization organization){
+		Session session = this.sessionFactory.getCurrentSession();
+		try{
+			session.update(organization);			
+			return organization;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	/**
 	 * 
 	 * @param id - user's id
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public List getUserOrganization(int id){
+	public Organization getOrganization(int id){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "From Organization o WHERE  o.createdBy = :user_id";
+			String hql = "From Organization o WHERE  o.id = :id";
 			Query query = session.createQuery(hql);
-			query.setParameter("user_id", id);
-			List list = query.list();
-			return list;
+			query.setParameter("id", id);
+			System.out.println(query.list());
+			List list = query.list() ;
+			
+			return (Organization) list.get(0);
 		}catch(Exception e){
+			e.printStackTrace();
 			return null;
 		}
 	}

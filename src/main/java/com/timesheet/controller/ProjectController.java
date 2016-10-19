@@ -25,7 +25,7 @@ import com.timesheet.service.ProjectService;
  */
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping("api/v1/projects")
+@RequestMapping("/api/v1/projects")
 public class ProjectController {
 	
 	// create bean of ProjectService

@@ -8,14 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.Task;
 import com.timesheet.service.TaskService;
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
-@RequestMapping(value="api/v1/task")
+@RequestMapping(value="/api/v1/tasks")
 public class TaskController {
 	@Autowired
 	TaskService taskService;
@@ -24,19 +26,21 @@ public class TaskController {
 	 * This create a new task 
 	 * @param task - take parameter task and save
 	 */
-	@RequestMapping(value="/")
-	public boolean createTask(Task task){
+	@RequestMapping(value="/",method=RequestMethod.POST)
+	public boolean createTask(@RequestBody Task task){
+		System.out.println("this is task"+task);
 		return taskService.createTask(task);
 	}
-	
 	/**
 	 * get all users task according to id
+	 * @param userId - users id 
+	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/getUser/{id}")
+	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	@ResponseBody
-	public List getUserTask(@PathVariable int userId){
-		
+	public List getUserTask(@PathVariable("id") int userId){
+		System.out.println("this is dhbsdb"+userId);
 		return taskService.getUserTask(userId);
 	}
 	/**
@@ -45,7 +49,7 @@ public class TaskController {
 	 * @param dates - date as a string  
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/getUser/{id}/{date}")
+	@RequestMapping(value="/{id}/{date}",method=RequestMethod.GET)
 	@ResponseBody
 	public List getUserTaskByDate(@PathVariable("id") int userId,@PathVariable("date") String dates){
 		System.out.println("this is in /getUser/{id}/{date}");
