@@ -13,7 +13,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.UserModel;
 
-
+/**
+ * 
+ * @author Avinash
+ * user's operation are come here 
+ */
 @Repository
 @Transactional
 public class UserDao {
@@ -115,7 +119,12 @@ public class UserDao {
 			return false;
 		}
 	}
-	
+	/**
+	 * Use to get id of user if present 
+	 * @param email - email of user
+	 * @return return id if user is present else return 0  
+	 */
+	@SuppressWarnings("rawtypes")
 	public int checkEmail(String email){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
@@ -124,7 +133,7 @@ public class UserDao {
 			query.setParameter("email", email);
 			List list = query.list();
 			if(list.size() > 0){
-				System.out.println("this is list's 0th element"+list.get(0));
+				//System.out.println("this is list's 0th element"+list.get(0));
 				return (int) list.get(0);
 			}
 			else{

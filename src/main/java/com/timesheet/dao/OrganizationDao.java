@@ -8,8 +8,6 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.timesheet.dao.model.Organization;
 
@@ -42,7 +40,11 @@ public class OrganizationDao {
 			return false;
 		}
 	}
-	
+	/**
+	 * 
+	 * @param id - user's id
+	 * @return
+	 */
 	@SuppressWarnings("rawtypes")
 	public List getUserOrganization(int id){
 		Session session = this.sessionFactory.getCurrentSession();
@@ -58,19 +60,21 @@ public class OrganizationDao {
 	}
 	/**
 	 * 
-	 * @param id
+	 * @param id - organization's id
 	 */
 	
-	public void getOrganizationProject(int id){
+	@SuppressWarnings({ "rawtypes" })
+	public List getOrganizationProject(int id){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "SELECT `Project` FROM project p where p.id IN (select OrganizationProject.projectId from OrganizationProject where OrganizationProject.orgId=:orgId)";
+			String hql = "FROM project p where p.id IN (select OrganizationProject.projectId from OrganizationProject where OrganizationProject.orgId=:orgId)";
 			Query query = session.createQuery(hql);
 			query.setParameter("orgId", id);
-			//List<Project> list = query.list();
+			List list = query.list();
+			return list;
 		}
 		catch(Exception e){
-			
+			return null;
 		}
 	}
 

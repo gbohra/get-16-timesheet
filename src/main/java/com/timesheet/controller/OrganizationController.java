@@ -4,14 +4,21 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.timesheet.dao.model.Organization;
 import com.timesheet.service.OrganizationService;
-
+/**
+ * 
+ * @author Avinash
+ * This is handle requests of Organization
+ */
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping(value="/timesheet/Organizations")
+@RequestMapping(value="api/v1/Organizations")
 public class OrganizationController {
 
 	@Autowired
@@ -22,8 +29,9 @@ public class OrganizationController {
 	 * @param organization 
 	 */
 	@RequestMapping(value="/")
-	public void addOrganizaion(Organization organization){
-		
+	public void addOrganizaion(@RequestBody Organization organization){
+		System.out.println(organization);
+		organizationService.addOrganizaion(organization);
 	}
 	/**
 	 * 
@@ -36,23 +44,11 @@ public class OrganizationController {
 	}
 	
 	/**
-	 * 
+	 * this method use for get arganization's all project
 	 * @param id
 	 */
 	@RequestMapping(value="/{id}/projects")
 	public void getOrganizationProject(@PathVariable int id){
-		organizationService.getOrganizationProject(id);
+		 organizationService.getOrganizationProject(id);
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

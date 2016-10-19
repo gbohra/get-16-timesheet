@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,8 +23,9 @@ import com.timesheet.service.ProjectService;
  * @author simran
  *
  */
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping("/timesheet/projects")
+@RequestMapping("api/v1/projects")
 public class ProjectController {
 	
 	// create bean of ProjectService
@@ -88,6 +90,7 @@ public class ProjectController {
 	 * get list of all projects
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
+	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/",method = RequestMethod.GET)
 	public ResponseEntity<List<ProjectModel>> getAllProjects() {
 		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),

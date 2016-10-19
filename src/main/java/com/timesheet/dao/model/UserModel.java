@@ -26,7 +26,6 @@ public class UserModel {
 			return id;
 		}
 	    
-
 		@Column(name="first_name")
 	    private String firstName;
 
@@ -48,6 +47,10 @@ public class UserModel {
 		@JsonFormat(pattern="yyyy-MM-dd")
 		private Date updatedDate;
 
+		@Column(name="refresh_token")
+		private String refreshToken;
+		
+		
 		public void setId(int id) {
 			this.id = id;
 		}
@@ -98,6 +101,20 @@ public class UserModel {
 
 		public void setUpdatedDate(Date updatedDate) {
 			this.updatedDate = updatedDate;
+		}
+
+		/**
+		 * @return the refreshToken
+		 */
+		public String getRefreshToken() {
+			return refreshToken;
+		}
+
+		/**
+		 * @param refreshToken the refreshToken to set
+		 */
+		public void setRefreshToken(String refreshToken) {
+			this.refreshToken = refreshToken;
 		}
 
 }

@@ -4,9 +4,7 @@ package com.timesheet.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.timesheet.dao.ProjectDao;
 import com.timesheet.dao.model.ProjectModel;
@@ -76,7 +74,8 @@ public class ProjectService {
 	 * 
 	 * @return List<ProjectModel> : List of project models
 	 */
-	public List<ProjectModel> getAllProjects() {
+	@SuppressWarnings("rawtypes")
+	public List getAllProjects() {
 		return projectDao.getAllProjects();
 	}
 

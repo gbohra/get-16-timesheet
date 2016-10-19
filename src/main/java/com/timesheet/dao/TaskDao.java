@@ -9,9 +9,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import com.timesheet.dao.model.Task;
-
+/**
+ * This 
+ * @author Avinash
+ *
+ */
 @Repository
-@Transactional
+@Transactional 
 public class TaskDao {
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -64,22 +68,17 @@ public class TaskDao {
 	 */
 	@SuppressWarnings("rawtypes")
 	public List getUserTaskByDate(int userId,Date date){
-		System.out.println("this is user dao ");
 		Session session = this.sessionFactory.getCurrentSession();	
-		//String hql = "FROM Task t where createdBy = 1 and (DATEDIFF(DATE_ADD(createdDate,INTERVAL repeatFrequency DAY),createdDate) >  0)";
-		String hql = "FROM Task";
+		String hql = "FROM Task t where createdBy = :id and (DATEDIFF(DAY,DATE_ADD(createdDate,INTERVAL repeatFrequency DAY),:date) >  0)";
 		try{
 			Query query = session.createQuery(hql);
-			System.out.println("hql is executrd");
+			query.setParameter("id", userId);
+			query.setParameter("date", date);
 			List list = query.list();
 			return list;
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
-		}
-				
+		}			
 	}
-
-	
-
 }

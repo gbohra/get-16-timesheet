@@ -14,8 +14,14 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
+/**
+ * 
+ * @author Aviash
+ * Google OAuth code come here
+ */
 public class GoogleOAuthUtil {
 	private GoogleAuthorizationCodeFlow flow;
+	@SuppressWarnings("unused")
 	public GoogleOAuthUtil(HttpSession session){
 		 
 		String CLIENT_SECRET_FILE = getClass().getClassLoader().getResource("client_secret.json").getFile();
@@ -29,10 +35,8 @@ public class GoogleOAuthUtil {
 			client_id = clientSecrets.getDetails().getClientId();
 			client_secret = clientSecrets.getDetails().getClientSecret();	
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -70,5 +74,4 @@ public class GoogleOAuthUtil {
 				.setRedirectUri(destinationURL).build();
 		return loginURL;
 	}
-	
 }

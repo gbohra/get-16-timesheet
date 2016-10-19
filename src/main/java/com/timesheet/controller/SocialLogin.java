@@ -1,16 +1,21 @@
 package com.timesheet.controller;
 
 import java.io.FileReader;
+
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import com.google.api.client.googleapis.auth.oauth2.GoogleAuthorizationCodeTokenRequest;
 import com.google.api.client.googleapis.auth.oauth2.GoogleClientSecrets;
 import com.google.api.client.googleapis.auth.oauth2.GoogleCredential;
@@ -20,7 +25,13 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.timesheet.dao.model.UserModel;
 import com.timesheet.service.UserService;
-
+/**
+ * 
+ * @author Avinash
+ * This handle social login  
+ */
+// use for cross origin request
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
 public class SocialLogin {
 	
@@ -29,8 +40,9 @@ public class SocialLogin {
 
 	private GoogleOAuthUtil oauth;
 
+	@SuppressWarnings("unused")
 	@RequestMapping(value="/oauth/callback")
-	public void AuthenticateToken(@RequestParam("code") String code) throws IOException{
+	public String AuthenticateToken(@RequestParam("code") String code) throws IOException{
 		
 		System.out.println(code);
 		String CLIENT_SECRET_FILE = getClass().getClassLoader().getResource("client_secret.json").getFile();
@@ -56,6 +68,7 @@ public class SocialLogin {
 
 
 		String accessToken = tokenResponse.getAccessToken();
+		String refreshToken = tokenResponse.getRefreshToken();
 		System.out.println(accessToken);
 
 		// Use access token to call API
@@ -75,7 +88,26 @@ public class SocialLogin {
 		// now store that user in data base and get id from it 
 		System.out.println("this is user's id "+id);
 		if(id <= 0){				// user not present in database
-			
+			UserModel userModel = new UserModel();
+			userModel.setEmail(email);
+			String splitName[] = name.split(" ");
+			if(splitName[0] != null){
+				userModel.setFirstName(splitName[0]);
+			}
+			if(splitName[1] != null){
+				userModel.setLastName(splitName[1]);
+			}
+			Calendar cal = Calendar.getInstance();
+			Date date = cal.getTime();
+			userModel.setCreatedDate(date);
+			userModel.setUpdatedDate(date);
+			userModel.setRefreshToken(refreshToken);
+			userService.insert(userModel);
+			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+			HttpSession session = attr.getRequest().getSession(true); 
+			session.setAttribute("email",email);
+			session.setAttribute("id",id);
+			session.setAttribute("name",name);
 		}
 		else{
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -87,42 +119,20 @@ public class SocialLogin {
 			}
 			session.setAttribute("name",name);
 		}
-		if(userId != null){
-			System.out.println("user id is null");
-			UserModel user = new UserModel();
-			if(email != null){
-				user.setEmail(email);
-			}
-			if(name != null){
-				String lastName = "";
-				String[] fullName = name.split(" ");
-				user.setFirstName(fullName[0]);
-				for(int i = 1 ; i < fullName.length ; ++i){
-				//	user += fullName[i]+" ";
-				}
-				user.setLastName(lastName);
-			}
-			if(pictureUrl != null){
-				//employee.setProfilePicture(pictureUrl);
-			}
-		}
-//		return "redirect:" + redirect to dashboard;
+		return "redirect:" + "http://localhost:3000/";
 	}
 	
 	@RequestMapping(value="/user/login")
 	public String userLogin(){
 		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-		HttpSession session = attr.getRequest().getSession(true); 
-		if (session == null){
+		HttpSession session = attr.getRequest().getSession(true);
+		System.out.println("session email "+session.getAttribute("email"));
+		if (session.getAttribute("email") == null){
 			oauth = new GoogleOAuthUtil(session);
-			String redirectUrl = oauth.createLoginUrl("http://localhost:8080/TimesheetVersion1/oauth/callback");
+			String redirectUrl = oauth.createLoginUrl("http://localhost:8080/TimeSheet/oauth/callback");
 			return "redirect:" + redirectUrl;
 		}else{
-			return "redirect:" + "http://localhost:8080/TimesheetVersion1/";
-		}
-		
-	}
-	
-	
-	
+			return "redirect:" + "http://localhost:8080/TimeSheet/";
+		}	
+	}	
 }

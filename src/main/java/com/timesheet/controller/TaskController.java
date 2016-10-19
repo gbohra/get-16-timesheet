@@ -15,7 +15,7 @@ import com.timesheet.dao.model.Task;
 import com.timesheet.service.TaskService;
 @CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping(value="/timesheet/task")
+@RequestMapping(value="api/v1/task")
 public class TaskController {
 	@Autowired
 	TaskService taskService;
@@ -26,10 +26,6 @@ public class TaskController {
 	 */
 	@RequestMapping(value="/")
 	public boolean createTask(Task task){
-		/*Task task = new Task();
-		task.setDescription("This is first task insertion");
-		task.setCreated_by(1);
-		task.setRepeat_frequency(5);*/
 		return taskService.createTask(task);
 	}
 	

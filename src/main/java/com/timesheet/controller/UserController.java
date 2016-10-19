@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -11,9 +12,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.UserModel;
 import com.timesheet.service.UserService;
-
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping(value="/timesheet/users")
+@RequestMapping(value="api/v1/users")
 public class UserController {
 	
 	@Autowired
@@ -27,24 +28,6 @@ public class UserController {
 	@RequestMapping(value="/")
 	@ResponseBody
 	public String insert(UserModel user){
-	/*	//System.out.println("this is user controller");
-		UserModel user = new UserModel();
-		user.setFirstName("fdjvdffb");
-		user.setLastName("vbbvu");
-		user.setEmail("hbdfbvfvb");
-		user.setPassword("kfjdbjbv");
-		Calendar calendar =  Calendar.getInstance();
-		calendar.set(Calendar.YEAR, 2000);
-		calendar.set(Calendar.MONTH, 1);
-		calendar.set(Calendar.DAY_OF_MONTH, 1);
-		Date date = calendar.getTime();
-		//SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-		
-		
-		user.setCreatedDate(date);
-		user.setUpdatedDate(date);
-		System.out.println("controler" +user);
-		*/
 		if (userService.insert(user)){
 			return "success";
 		}

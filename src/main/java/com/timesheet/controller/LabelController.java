@@ -15,9 +15,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.timesheet.dao.model.LabelModel;
 import com.timesheet.service.LabelService;
 
-@CrossOrigin(origins = "")
+/**
+ * 
+ * @author Avinash
+ * This use for label operations
+ */
+//use for cross origin request
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping("/timesheet")
+@RequestMapping("api/v1/label")
 public class LabelController {
 	
 	@Autowired

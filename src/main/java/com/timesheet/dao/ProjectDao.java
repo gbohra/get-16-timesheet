@@ -6,7 +6,6 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -89,11 +88,11 @@ public class ProjectDao {
 	 * 
 	 * @return List<ProjectModel> : List of project models
 	 */
-	@SuppressWarnings("unchecked")
-	public List<ProjectModel> getAllProjects() {
+	@SuppressWarnings({"rawtypes" })
+	public List getAllProjects() {
 		// creating session object
 		Session session = sessionFactory.getCurrentSession();
-		List<ProjectModel> criteria = session
+		List criteria = session
 				.createCriteria(ProjectModel.class).list();
 		return criteria;
 	}

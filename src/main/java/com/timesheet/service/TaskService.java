@@ -40,6 +40,7 @@ public class TaskService {
 	 * @param userId - user's id
 	 * @return - list of user's task
 	 */
+	@SuppressWarnings("rawtypes")
 	public List getUserTask(int id){
 		return taskDao.getTask(id);
 	}

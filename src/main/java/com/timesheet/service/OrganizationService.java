@@ -2,8 +2,6 @@ package com.timesheet.service;
 
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,8 +36,8 @@ public class OrganizationService {
 	 * This method is use to insert User object in data base 
 	 * @param organization
 	 */
-	public void addOrganizaion(Organization organization){
-		organizationDao.addOrganization(organization);
+	public boolean addOrganizaion(Organization organization){
+		return organizationDao.addOrganization(organization);
 	}
 	
 	/**
@@ -47,6 +45,7 @@ public class OrganizationService {
 	 * @param id -- user's id
 	 * @return List of Organization
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Organization> getUserOrganization(int id){
 		return organizationDao.getUserOrganization(id);
 	}
