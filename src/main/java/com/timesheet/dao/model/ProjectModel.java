@@ -28,6 +28,7 @@ public class ProjectModel {
 	private int id;
 
 	// column mapping
+	
 	@Column(name = "name")
 	private String name;
 

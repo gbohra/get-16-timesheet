@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.Task;
 import com.timesheet.service.TaskService;
+import com.timesheet.utill.JWTTokenUtill;
+import com.timesheet.utill.TokenInfo;
 @CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
 @RequestMapping(value="/api/v1")
@@ -51,6 +53,17 @@ public class TaskController {
 	@RequestMapping(value="/user/{id}/task",method=RequestMethod.GET)
 	@ResponseBody
 	public List getTask(@PathVariable("id") int userId){
+		System.out.println("now i am in controller");
+		TokenInfo info = new TokenInfo();
+		info.setAccessToken("fhduyfgdvyughdvyregvhrvyuervg");
+		info.setEmail("ygshsdvyv");
+		info.setId(1);
+		info.setName("avinash");
+		String encryptedText = JWTTokenUtill.getEncrypted(info);
+		System.out.println("let us test it"+JWTTokenUtill.getEncrypted(info));
+		TokenInfo s = JWTTokenUtill.getDecrypt(encryptedText);
+		System.out.println("this is encrpted name"+s.getName());
+		System.out.println("this is enc email"+s.getEmail());
 		System.out.println(""+userId);
 		return taskService.getTask(userId);
 	}

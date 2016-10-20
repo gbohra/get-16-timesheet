@@ -1,7 +1,6 @@
 package com.timesheet.controller;
 
 import java.io.FileReader;
-
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
@@ -11,8 +10,12 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -25,13 +28,15 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.timesheet.dao.model.UserModel;
 import com.timesheet.service.UserService;
+import com.timesheet.utill.JWTTokenUtill;
+import com.timesheet.utill.TokenInfo;
 /**
  * 
  * @author Avinash
  * This handle social login  
  */
 // use for cross origin request
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
 public class SocialLogin {
 	
@@ -87,6 +92,12 @@ public class SocialLogin {
 		int id = userService.checkEmail(email);
 		// now store that user in data base and get id from it 
 		System.out.println("this is user's id "+id);
+		TokenInfo token = new TokenInfo();
+		token.setAccessToken(accessToken);
+		token.setEmail(email);
+		
+		token.setName(name);
+		
 		if(id <= 0){				// user not present in database
 			UserModel userModel = new UserModel();
 			userModel.setEmail(email);
@@ -108,18 +119,23 @@ public class SocialLogin {
 			session.setAttribute("email",email);
 			session.setAttribute("id",id);
 			session.setAttribute("name",name);
+			token.setId(id);
 		}
 		else{
 			ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 			HttpSession session = attr.getRequest().getSession(true); 
 			session.setAttribute("email",email);
 			session.setAttribute("id",id);
+			token.setId(id);
 			if(pictureUrl != null){
 				session.setAttribute("picture",pictureUrl);
 			}
 			session.setAttribute("name",name);
 		}
-		return "redirect:" + "http://localhost:3000/";
+		
+		
+		String encrString = JWTTokenUtill.getEncrypted(token);
+		return "redirect:" + "http://192.168.100.113:3000/?token="+encrString;
 	}
 	
 	@RequestMapping(value="/user/login")
@@ -134,5 +150,24 @@ public class SocialLogin {
 		}else{
 			return "redirect:" + "http://localhost:8080/TimeSheet/";
 		}	
-	}	
+	}
+	
+	
+	@RequestMapping(value="/validate/{token}",method=RequestMethod.POST)
+	@ResponseBody
+	public String validate(@PathVariable("token") String token){
+		System.out.println("Token "+token);
+		TokenInfo tokenInfo = JWTTokenUtill.getDecrypt(token);
+		return "{'user_name':'name1','email':'asdasd@fff.com', 'token':'"+token+"'}";
+//		if(tokenInfo != null){
+//			if(tokenInfo.getEmail() == null || tokenInfo.getEmail().equals("")){
+//				return false;
+//			}else{
+//				return true;
+//			}
+//		}else{
+//			return false;
+//		}
+		
+	}
 }
