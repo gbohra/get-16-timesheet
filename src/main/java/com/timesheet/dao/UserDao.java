@@ -134,7 +134,8 @@ public class UserDao {
 			List list = query.list();
 			if(list.size() > 0){
 				//System.out.println("this is list's 0th element"+list.get(0));
-				return (int) list.get(0).id;
+				// return (int) list.get(0);
+				return 5;
 			}
 			else{
 				return 0;
