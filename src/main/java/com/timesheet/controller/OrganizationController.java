@@ -2,8 +2,12 @@ package com.timesheet.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.Organization;
 import com.timesheet.service.OrganizationService;
+import com.timesheet.vo.OrganizationVO;
 /**
  * 
  * @author Avinash
@@ -32,9 +37,13 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value="/",method=RequestMethod.POST)
 	@ResponseBody
-	public Organization addOrganizaion(@RequestBody Organization organization){
-		System.out.println(organization);
-		return organizationService.addOrganizaion(organization);
+	public OrganizationVO addOrganizaion(@RequestBody @Validated OrganizationVO organizationvo , BindingResult bindingResult){
+		System.out.println(organizationvo);
+		if (bindingResult.hasErrors()) {
+			return organizationvo;
+		} else {
+			return organizationService.addOrganizaion(organizationvo);
+		}
 	}
 	/**
 	 * 

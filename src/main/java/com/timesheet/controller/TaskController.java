@@ -4,8 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.timesheet.dao.model.Task;
 import com.timesheet.service.TaskService;
+import com.timesheet.vo.TaskVO;
 @CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
 @RequestMapping(value="/api/v1/tasks")
@@ -27,10 +30,15 @@ public class TaskController {
 	 * @param task - take parameter task and save
 	 */
 	@RequestMapping(value="/",method=RequestMethod.POST)
-	public boolean createTask(@RequestBody Task task){
-		System.out.println("this is task"+task);
-		return taskService.createTask(task);
+	public boolean createTask(@RequestBody @Valid TaskVO taskvo,  BindingResult bindingResult){
+		System.out.println("this is task"+taskvo);
+		if (bindingResult.hasErrors()) {
+		return true;
 	}
+		else{
+			return taskService.createTask(taskvo);
+		}
+		}
 	/**
 	 * get all users task according to id
 	 * @param userId - users id 

@@ -2,12 +2,12 @@ package com.timesheet.service;
 
 import java.util.Date;
 import java.util.List;
-
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import com.timesheet.dao.TaskDao;
 import com.timesheet.dao.model.Task;
+import com.timesheet.vo.TaskVO;
 
 @Service
 public class TaskService {
@@ -24,14 +24,20 @@ public class TaskService {
 	public void setTaskDao(TaskDao taskDao) {
 		this.taskDao = taskDao;
 	}
-
-
+   /**
+    * to convert TaskVO to TaskModel
+    */
+	protected void populateVOIntoModel(TaskVO taskvo, Task taskModel) {
+		BeanUtils.copyProperties(taskvo, taskModel);
+    }
 	/**
 	 * This create a new task  
 	 * @param task - take parameter task and save
 	 */
-	public boolean createTask(Task task){
-		return taskDao.createTask(task);
+	public boolean createTask(TaskVO taskvo){
+		Task taskModel =  new Task() ;
+		populateVOIntoModel(taskvo, taskModel);
+		return taskDao.createTask(taskModel);
 	}
 	
 	

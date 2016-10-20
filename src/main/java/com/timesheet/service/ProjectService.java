@@ -3,11 +3,13 @@ package com.timesheet.service;
 //import all required classes
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.ProjectDao;
 import com.timesheet.dao.model.ProjectModel;
+import com.timesheet.vo.ProjectVO;
 
 /**
  * Service Layer for accessing ProjectDAO
@@ -40,22 +42,39 @@ public class ProjectService {
 	public void setProjectDao(ProjectDao projectDao) {
 		this.projectDao = projectDao;
 	}
+	
+	protected ProjectModel populateVOIntoModel(ProjectVO projectVO, ProjectModel projectModel) {
+        BeanUtils.copyProperties(projectVO, projectModel);
+        return projectModel;
+    }
 
+    protected ProjectVO populateModelIntoVO(ProjectVO projectVO, ProjectModel projectModel) {
+        BeanUtils.copyProperties(projectModel , projectVO);
+        return projectVO;
+    }
+
+	 /**
+     *create a new project
+     * @param projectModel
+     * @return ProjectModel : new created reference of ProjectModel
+     */
+	public ProjectVO createProject(ProjectVO projectVO) {
+		ProjectModel projectModel = new ProjectModel();
+		projectModel = populateVOIntoModel(projectVO, projectModel);
+		projectModel = projectDao.createProject(projectModel);
+		return populateModelIntoVO(projectVO, projectModel);
+	}
+	
 	/**
-	 * method to save the project details. Either create a new entry or update
-	 * existing depending upon the existing entries in the database
-	 * 
-	 * @param projectModel
+	 * update project details
+     * @param projectModel
+     * @return ProjectModel : new updated reference of ProjectModel
 	 */
-	public void createOrUpdateProject(ProjectModel projectModel) {
-		// create a new project if the requested id does not exist
-		if (projectModel.getId() == -1) {
-			projectDao.createProject(projectModel);
-		}
-		// update the project details if the requested id does exists
-		else {
-			projectDao.updateProject(projectModel);
-		}
+	public ProjectVO updateProject(ProjectVO projectVO) {
+		ProjectModel projectModel = new ProjectModel();
+		projectModel = populateVOIntoModel(projectVO, projectModel);
+		projectModel = projectDao.updateProject(projectModel);
+		return populateModelIntoVO(projectVO, projectModel);
 	}
 
 	/**
@@ -65,14 +84,14 @@ public class ProjectService {
 	 *            : id of project to be deleted
 	 * @return boolean : true if updated successfully else false
 	 */
-	public boolean deleteProject(long id) {
+	public boolean deleteProject(int id) {
 		return projectDao.deleteProject(id);
 	}
 
 	/**
 	 * get all projects
 	 * 
-	 * @return List<ProjectModel> : List of project models
+	 * @return List : List of project models
 	 */
 	@SuppressWarnings("rawtypes")
 	public List getAllProjects() {
@@ -89,4 +108,34 @@ public class ProjectService {
 	public ProjectModel getProjectById(long id) {
 		return projectDao.getProjectById(id);
 	}
+	
+	
+	
+	
+	/**
+	 * get all projects
+	 * 
+	 * @return List<ProjectModel> : List of project models
+	 */
+	@SuppressWarnings("rawtypes")
+	public List getProjects(int user_id) {
+		return projectDao.getProjects(user_id);
+	}
+
+	/**
+	 * get project details by id
+	 * 
+	 * @param id
+	 *            : id of project to be retrieved
+	 * @return ProjectModel : project model having id equal to requested id
+	 */
+	public ProjectModel getProjectDetails(int id) {
+		return projectDao.getProjectDetails(id);
+	}
+	
+	
+	
+	
+	
+	
 }

@@ -2,17 +2,20 @@ package com.timesheet.service;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.OrganizationDao;
 import com.timesheet.dao.model.Organization;
+import com.timesheet.vo.OrganizationVO;
 
 @Service
 public class OrganizationService {
 	
 	@Autowired
 	OrganizationDao organizationDao;
+	
 	
 	/**
 	 * This is getter of organizationDao
@@ -31,13 +34,25 @@ public class OrganizationService {
 		this.organizationDao = organizationDao;
 	}
 
+	
+	protected void populateVOIntoModel(OrganizationVO organizationVO, Organization organizationModel) {
+		BeanUtils.copyProperties(organizationVO, organizationModel);
+    }
+
+    protected void populateModelIntoVO(OrganizationVO organizationVO, Organization organizationModel) {
+    	BeanUtils.copyProperties(organizationModel , organizationVO);
+    }
 
 	/**
 	 * This method is use to insert User object in data base 
 	 * @param organization
 	 */
-	public Organization addOrganizaion(Organization organization){
-		return organizationDao.addOrganization(organization);
+	public OrganizationVO addOrganizaion(OrganizationVO organizationVO){
+		Organization organizationModel =  new Organization() ;
+		populateVOIntoModel(organizationVO, organizationModel);
+		organizationModel = organizationDao.addOrganization(organizationModel);
+		populateModelIntoVO(organizationVO, organizationModel);
+		return organizationVO;
 	}
 	
 	/**

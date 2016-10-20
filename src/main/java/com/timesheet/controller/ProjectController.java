@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.ProjectModel;
 import com.timesheet.service.ProjectService;
+import com.timesheet.vo.ProjectVO;
 
 /**
  * Controller for accessing ProjectService
@@ -23,7 +26,7 @@ import com.timesheet.service.ProjectService;
  * @author simran
  *
  */
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
 @RequestMapping("/api/v1/projects")
 public class ProjectController {
@@ -54,25 +57,31 @@ public class ProjectController {
     /**
      *create a new project
      * @param projectModel
-     * @return ResponseEntity<String> : String
+     * @return ProjectModel : new created reference of ProjectModel
      */
-	@RequestMapping(value="/",method = RequestMethod.POST)
-	public ResponseEntity<String> createProject(@RequestBody ProjectModel projectModel) {
-		projectService.createOrUpdateProject(projectModel);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
+	@RequestMapping(method = RequestMethod.POST)
+	@ResponseBody
+	public ProjectVO createProject(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult ) {
+		if(bindingResult.hasErrors()) {
+			return projectVO;
+		} else {
+			return projectService.createProject(projectVO);
+		}
 	}
 	
 	/**
 	 * update project details
-	 * @param projectModel
-	 * @param id : id of project to be updated
-	 * @return ResponseEntity<String>
+     * @param projectModel
+     * @return ProjectModel : new updated reference of ProjectModel
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateProject(@RequestBody ProjectModel projectModel,
-			@PathVariable("id") long id) {
-		projectService.createOrUpdateProject(projectModel);
-		return new ResponseEntity<String>(HttpStatus.OK);
+	@RequestMapping(method = RequestMethod.PUT)
+	@ResponseBody
+	public ProjectVO updateProject(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return projectVO;
+		} else {
+		return projectService.updateProject(projectVO);
+		}
 	}
 	
 	/**
@@ -81,20 +90,32 @@ public class ProjectController {
 	 * @return ResponseEntity<String>
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteProject(@PathVariable("id") long id) {
-		projectService.deleteProject(id);
+    public ResponseEntity<String> deleteProject(@PathVariable("id") int id) {
+		
     	return new ResponseEntity<String>(HttpStatus.OK);    	
     }
 	
 	/**
-	 * get list of all projects
+	 * get list of all projects in database
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value="/",method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
 	public ResponseEntity<List<ProjectModel>> getAllProjects() {
 		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),
 				HttpStatus.OK);
+	}
+
+	/**
+	 * get list of all projects
+	 * @return ResponseEntity<List<ProjectModel>>
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/getProjects/{user_id}" , method = RequestMethod.GET)
+	@ResponseBody
+	public List getProjects(@PathVariable("user_id") int user_id) {
+		return projectService.getProjects(user_id);
 	}
 	
 	/**
@@ -104,8 +125,8 @@ public class ProjectController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<ProjectModel> getProjectById(@PathVariable("id") long id) {
-		return new ResponseEntity<ProjectModel>(projectService.getProjectById(id),
-				HttpStatus.OK);
+	public ProjectModel getProjectDetails(@PathVariable("id") int id) {
+		return projectService.getProjectDetails(id);
 	}
+		
 }
