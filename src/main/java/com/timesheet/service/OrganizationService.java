@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.OrganizationDao;
-import com.timesheet.dao.model.Organization;
+import com.timesheet.dao.model.OrganizationModel;
 import com.timesheet.vo.OrganizationVO;
 
 @Service
@@ -16,7 +17,19 @@ public class OrganizationService {
 	@Autowired
 	OrganizationDao organizationDao;
 	
+	@Autowired
+	ApplicationContext applicationContext;
 	
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+
+
+	public void setApplicationContext(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
+	}
+
+
 	/**
 	 * This is getter of organizationDao
 	 * @return organizationDao 
@@ -35,11 +48,11 @@ public class OrganizationService {
 	}
 
 	
-	protected void populateVOIntoModel(OrganizationVO organizationVO, Organization organizationModel) {
+	protected void populateVOIntoModel(OrganizationVO organizationVO, OrganizationModel organizationModel) {
 		BeanUtils.copyProperties(organizationVO, organizationModel);
     }
 
-    protected void populateModelIntoVO(OrganizationVO organizationVO, Organization organizationModel) {
+    protected void populateModelIntoVO(OrganizationVO organizationVO, OrganizationModel organizationModel) {
     	BeanUtils.copyProperties(organizationModel , organizationVO);
     }
 
@@ -48,7 +61,7 @@ public class OrganizationService {
 	 * @param organization
 	 */
 	public OrganizationVO addOrganizaion(OrganizationVO organizationVO){
-		Organization organizationModel =  new Organization() ;
+		OrganizationModel organizationModel =  applicationContext.getBean(OrganizationModel.class);
 		populateVOIntoModel(organizationVO, organizationModel);
 		organizationModel = organizationDao.addOrganization(organizationModel);
 		populateModelIntoVO(organizationVO, organizationModel);
@@ -60,8 +73,8 @@ public class OrganizationService {
 	 * @param id -- user's id
 	 * @return List of Organization
 	 */
-	@SuppressWarnings("unchecked")
-	public List<Organization> getOrganizations(){
+	@SuppressWarnings({ "rawtypes" })
+	public List getOrganizations(){
 		return organizationDao.getOrganizations();
 	}
 	
@@ -70,8 +83,12 @@ public class OrganizationService {
 	 * @param id -- user's id
 	 * @return List of Organization
 	 */
-	public Organization updateOrganization(Organization o){
-		return organizationDao.updateOrganization(o);
+	public OrganizationVO updateOrganization(OrganizationVO organizationVO){
+		OrganizationModel organizationModel =  applicationContext.getBean(OrganizationModel.class);
+		populateVOIntoModel(organizationVO, organizationModel);
+		organizationModel =organizationDao.updateOrganization(organizationModel);
+		populateModelIntoVO(organizationVO, organizationModel);
+		return organizationVO;
 	}
 	
 	/**
@@ -79,9 +96,12 @@ public class OrganizationService {
 	 * @param id -- user's id
 	 * @return List of Organization
 	 */
-	@SuppressWarnings("unchecked")
-	public Organization getOrganization(int id){
-		return organizationDao.getOrganization(id);
+	public OrganizationVO getOrganization(OrganizationVO organizationVO){
+		OrganizationModel organizationModel =  applicationContext.getBean(OrganizationModel.class);
+		populateVOIntoModel(organizationVO, organizationModel);
+		organizationModel =organizationDao.getOrganization(organizationModel);
+		populateModelIntoVO(organizationVO, organizationModel);
+		return organizationVO;
 	}
 	
 	/**

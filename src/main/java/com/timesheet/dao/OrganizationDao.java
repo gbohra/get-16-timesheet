@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.timesheet.dao.model.Organization;
+import com.timesheet.dao.model.OrganizationModel;
 
 @Repository
 @Transactional
@@ -31,7 +31,7 @@ public class OrganizationDao {
 	 * @param organization -- organization object
 	 * @return true if successfully added else return false
 	 */
-	public Organization addOrganization(Organization organization){
+	public OrganizationModel addOrganization(OrganizationModel organization){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
 			session.save(organization);
@@ -67,7 +67,7 @@ public class OrganizationDao {
 	 * @param organization to update
 	 * @return organization
 	 */
-	public Organization updateOrganization(Organization organization){
+	public OrganizationModel updateOrganization(OrganizationModel organization){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
 			session.update(organization);			
@@ -84,16 +84,16 @@ public class OrganizationDao {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public Organization getOrganization(int id){
+	public OrganizationModel getOrganization(OrganizationModel organizationModel){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
 			String hql = "From Organization o WHERE  o.id = :id";
 			Query query = session.createQuery(hql);
-			query.setParameter("id", id);
+			query.setParameter("id", organizationModel.getId());
 			System.out.println(query.list());
 			List list = query.list() ;
 			
-			return (Organization) list.get(0);
+			return (OrganizationModel) list.get(0);
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;

@@ -4,6 +4,7 @@ package com.timesheet.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.timesheet.dao.model.ProjectModel;
 import com.timesheet.service.ProjectService;
 import com.timesheet.vo.ProjectVO;
 
@@ -34,6 +33,9 @@ public class ProjectController {
 	// create bean of ProjectService
 	@Autowired
 	private ProjectService projectService;
+	
+	@Autowired
+	private ApplicationContext applicationContext;
 	
 	/**
 	 * get projectService
@@ -61,7 +63,7 @@ public class ProjectController {
      */
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public ProjectVO createProject(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult ) {
+	public ProjectVO create(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult ) {
 		if(bindingResult.hasErrors()) {
 			return projectVO;
 		} else {
@@ -90,34 +92,22 @@ public class ProjectController {
 	 * @return ResponseEntity<String>
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteProject(@PathVariable("id") int id) {
-		
-    	return new ResponseEntity<String>(HttpStatus.OK);    	
+    public void deleteProject(@PathVariable("id") int id) {
+    	    	
     }
 	
 	/**
 	 * get list of all projects in database
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "rawtypes" })
 	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<ProjectModel>> getAllProjects() {
-		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),
+	public ResponseEntity<List> getAllProjects() {
+		return new ResponseEntity<List>(projectService.getAllProjects(),
 				HttpStatus.OK);
 	}
 
-	/**
-	 * get list of all projects
-	 * @return ResponseEntity<List<ProjectModel>>
-	 */
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/getProjects/{user_id}" , method = RequestMethod.GET)
-	@ResponseBody
-	public List getProjects(@PathVariable("user_id") int user_id) {
-		return projectService.getProjects(user_id);
-	}
-	
 	/**
 	 * get project details by id
 	 * @param id : id of project to be retrieved
@@ -125,8 +115,18 @@ public class ProjectController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ProjectModel getProjectDetails(@PathVariable("id") int id) {
-		return projectService.getProjectDetails(id);
+	public ProjectVO getProjectDetails(@PathVariable("id") int id) {
+		ProjectVO projectVO = applicationContext.getBean(ProjectVO.class);
+		projectVO.setId(id);
+		return projectService.getProjectDetails(projectVO);
+	}
+
+	public ApplicationContext getApplicationContext() {
+		return applicationContext;
+	}
+
+	public void setApplicationContext(ApplicationContext applicationContext) {
+		this.applicationContext = applicationContext;
 	}
 		
 }

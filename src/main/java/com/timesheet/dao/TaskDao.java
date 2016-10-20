@@ -8,7 +8,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import com.timesheet.dao.model.Task;
+import com.timesheet.dao.model.TaskModel;
 /**
  * This 
  * @author Avinash
@@ -32,7 +32,7 @@ public class TaskDao {
 	 * This create a new task 
 	 * @param task - take parameter task and save
 	 */
-	public boolean createTask(Task task){
+	public boolean createTask(TaskModel task){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
 			session.save(task);
@@ -46,7 +46,7 @@ public class TaskDao {
 	 * @param userId - user's id
 	 * @return - list of user's task
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@SuppressWarnings({ "rawtypes" })
 	public List getTask(int userId){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{

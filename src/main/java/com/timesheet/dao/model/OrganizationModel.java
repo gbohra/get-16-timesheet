@@ -9,10 +9,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.stereotype.Component;
+
 
 @Entity
+@Component
 @Table(name="Organization")
-public class Organization {
+public class OrganizationModel {
 
 	@Id
 	@Column(name = "id")
