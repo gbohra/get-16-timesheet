@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.web.filter.GenericFilterBean;
 
-@WebFilter({"/"})
+@WebFilter({"/"/*,"/api","/api/v1/user/","/api/v1/"*/})
 public class LoginInterceptor extends GenericFilterBean {
 
 
@@ -28,6 +28,7 @@ public class LoginInterceptor extends GenericFilterBean {
 			
 			String email = (String)session.getAttribute("email");
 			if (session == null || email == null) {
+				System.out.println("session is null");
 				httpResponse.sendRedirect("");
 			}
 			filterChain.doFilter(request, response);

@@ -23,7 +23,7 @@ import com.timesheet.service.ProjectService;
  * @author simran
  *
  */
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
 @RequestMapping("/api/v1/projects")
 public class ProjectController {
@@ -56,10 +56,12 @@ public class ProjectController {
      * @param projectModel
      * @return ResponseEntity<String> : String
      */
-	@RequestMapping(value="/",method = RequestMethod.POST)
-	public ResponseEntity<String> createProject(@RequestBody ProjectModel projectModel) {
-		projectService.createOrUpdateProject(projectModel);
-		return new ResponseEntity<String>(HttpStatus.CREATED);
+	@RequestMapping(value="",method = RequestMethod.POST)
+	@ResponseBody
+	public ProjectModel createProject(@RequestBody ProjectModel projectModel) {	
+		projectModel.setCreatedBy(1);
+		projectModel.setUpdatedBy(1);
+		return projectService.createProject(projectModel);
 	}
 	
 	/**
@@ -68,11 +70,11 @@ public class ProjectController {
 	 * @param id : id of project to be updated
 	 * @return ResponseEntity<String>
 	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-	public ResponseEntity<String> updateProject(@RequestBody ProjectModel projectModel,
-			@PathVariable("id") long id) {
-		projectService.createOrUpdateProject(projectModel);
-		return new ResponseEntity<String>(HttpStatus.OK);
+	@RequestMapping(value = "/", method = RequestMethod.PUT)
+	@ResponseBody
+	public ProjectModel updateProject(@RequestBody ProjectModel projectModel) {
+		System.out.println("this is update project");
+		return projectService.updateProject(projectModel);
 	}
 	
 	/**
@@ -81,8 +83,8 @@ public class ProjectController {
 	 * @return ResponseEntity<String>
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteProject(@PathVariable("id") long id) {
-		projectService.deleteProject(id);
+    public ResponseEntity<String> deleteProject(@PathVariable("id") int id) {
+		
     	return new ResponseEntity<String>(HttpStatus.OK);    	
     }
 	
@@ -91,10 +93,37 @@ public class ProjectController {
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value="/",method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
+	@ResponseBody
 	public ResponseEntity<List<ProjectModel>> getAllProjects() {
 		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),
 				HttpStatus.OK);
+	}
+	
+/*	*//**
+	 * get project details by id
+	 * @param id : id of project to be retrieved
+	 * @return ResponseEntity<ProjectModel>
+	 *//*
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ResponseEntity<ProjectModel> getProjectById(@PathVariable("id") int id) {
+		return new ResponseEntity<ProjectModel>(projectService.getProjectById(id),
+				HttpStatus.OK);
+	}*/
+	
+	
+	
+	
+	/**
+	 * get list of all projects
+	 * @return ResponseEntity<List<ProjectModel>>
+	 */
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/getProjects/{user_id}" , method = RequestMethod.GET)
+	@ResponseBody
+	public List getProjects(@PathVariable("user_id") int user_id) {
+		return projectService.getProjects(user_id);
 	}
 	
 	/**
@@ -104,8 +133,13 @@ public class ProjectController {
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<ProjectModel> getProjectById(@PathVariable("id") long id) {
-		return new ResponseEntity<ProjectModel>(projectService.getProjectById(id),
-				HttpStatus.OK);
+	public ProjectModel getProjectDetails(@PathVariable("id") int id) {
+		return projectService.getProjectDetails(id);
 	}
+	
+	
+	
+	
+	
+	
 }

@@ -25,7 +25,7 @@ public class ProjectModel {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private long id;
+	private int id;
 
 	// column mapping
 	@Column(name = "name")
@@ -45,17 +45,17 @@ public class ProjectModel {
 
 	// column mapping
 	@Column(name = "created_by")
-	private long createdBy;
+	private int createdBy;
 
 	// column mapping
 	@Column(name = "updated_by")
-	private long updatedBy;
+	private int updatedBy;
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
@@ -91,19 +91,19 @@ public class ProjectModel {
 		this.updatedDate = updatedDate;
 	}
 
-	public long getCreatedBy() {
+	public int getCreatedBy() {
 		return createdBy;
 	}
 
-	public void setCreatedBy(long createdBy) {
+	public void setCreatedBy(int createdBy) {
 		this.createdBy = createdBy;
 	}
 
-	public long getUpdatedBy() {
+	public int getUpdatedBy() {
 		return updatedBy;
 	}
 
-	public void setUpdatedBy(long updatedBy) {
+	public void setUpdatedBy(int updatedBy) {
 		this.updatedBy = updatedBy;
 	}
 

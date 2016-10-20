@@ -30,8 +30,13 @@ public class TaskService {
 	 * This create a new task  
 	 * @param task - take parameter task and save
 	 */
-	public boolean createTask(Task task){
+	public Task createTask(Task task){
 		return taskDao.createTask(task);
+	}
+	
+	
+	public Task updateTask(Task task){
+		return taskDao.updateTask(task);
 	}
 	
 	
@@ -41,7 +46,7 @@ public class TaskService {
 	 * @return - list of user's task
 	 */
 	@SuppressWarnings("rawtypes")
-	public List getUserTask(int id){
+	public List getTask(int id){
 		return taskDao.getTask(id);
 	}
 	/**
@@ -51,7 +56,6 @@ public class TaskService {
 	 */
 	@SuppressWarnings("rawtypes")
 	public List getUserByDate(int userId,Date date){
-		return taskDao.getUserTaskByDate(userId, date);
+		return taskDao.getTaskByDate(userId, date);
 	}
-
 }

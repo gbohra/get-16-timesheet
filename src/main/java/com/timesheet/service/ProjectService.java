@@ -47,15 +47,20 @@ public class ProjectService {
 	 * 
 	 * @param projectModel
 	 */
-	public void createOrUpdateProject(ProjectModel projectModel) {
+	public ProjectModel createProject(ProjectModel projectModel) {
 		// create a new project if the requested id does not exist
-		if (projectModel.getId() == -1) {
-			projectDao.createProject(projectModel);
-		}
-		// update the project details if the requested id does exists
-		else {
-			projectDao.updateProject(projectModel);
-		}
+		return projectDao.createProject(projectModel);
+	}
+	
+	/**
+	 * method to save the project details. Either create a new entry or update
+	 * existing depending upon the existing entries in the database
+	 * 
+	 * @param projectModel
+	 */
+	public ProjectModel updateProject(ProjectModel projectModel) {
+		// create a new project if the requested id does not exist
+		return projectDao.updateProject(projectModel);
 	}
 
 	/**
@@ -65,7 +70,7 @@ public class ProjectService {
 	 *            : id of project to be deleted
 	 * @return boolean : true if updated successfully else false
 	 */
-	public boolean deleteProject(long id) {
+	public boolean deleteProject(int id) {
 		return projectDao.deleteProject(id);
 	}
 
@@ -89,4 +94,33 @@ public class ProjectService {
 	public ProjectModel getProjectById(long id) {
 		return projectDao.getProjectById(id);
 	}
+	
+	
+	
+	
+	/**
+	 * get all projects
+	 * 
+	 * @return List<ProjectModel> : List of project models
+	 */
+	public List getProjects(int user_id) {
+		return projectDao.getProjects(user_id);
+	}
+
+	/**
+	 * get project details by id
+	 * 
+	 * @param id
+	 *            : id of project to be retrieved
+	 * @return ProjectModel : project model having id equal to requested id
+	 */
+	public ProjectModel getProjectDetails(int id) {
+		return projectDao.getProjectDetails(id);
+	}
+	
+	
+	
+	
+	
+	
 }

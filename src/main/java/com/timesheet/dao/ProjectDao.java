@@ -3,8 +3,10 @@ package com.timesheet.dao;
 //import all required classes
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,11 +53,15 @@ public class ProjectDao {
 	 * @param projectModel
 	 * @return boolean : true if updated successfully else false
 	 */
-	public boolean createProject(ProjectModel projectModel) {
+	public ProjectModel createProject(ProjectModel projectModel) {
 		// creating session object
-		Session session = sessionFactory.getCurrentSession();
-		session.save(projectModel);
-		return true;
+		try{
+			Session session = sessionFactory.getCurrentSession();
+			session.save(projectModel);
+			return projectModel;
+		}catch(Exception e){
+			return null;
+		}
 	}
 
 	/**
@@ -64,9 +70,13 @@ public class ProjectDao {
 	 * @param projectModel
 	 * @return boolean : true if updated successfully else false
 	 */
-	public boolean updateProject(ProjectModel projectModel) {
-		sessionFactory.getCurrentSession().update(projectModel);
-		return true;
+	public ProjectModel updateProject(ProjectModel projectModel) {
+		try{
+			sessionFactory.getCurrentSession().update(projectModel);
+			return projectModel;
+		}catch(Exception e){
+			return null;
+		}
 	}
 
 	/**
@@ -108,4 +118,38 @@ public class ProjectDao {
 		Session session = sessionFactory.getCurrentSession();
 		return (ProjectModel) session.get(ProjectModel.class, id);
 	}
+	
+	
+	
+	
+	/**
+	 * get all projects
+	 * 
+	 * @return List<ProjectModel> : List of project models
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ProjectModel> getProjects(int user_id) {
+		Session session = sessionFactory.getCurrentSession();
+		Criteria criteria = session.createCriteria(ProjectModel.class);
+		criteria.add(Restrictions.eq("createdBy", user_id));
+		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+	    List<ProjectModel> projectModelList = criteria.list();
+	    return projectModelList;
+	}
+
+	/**
+	 * get project by id
+	 * 
+	 * @param id
+	 *            : id of project to be fetched
+	 * @return ProjectModel : project model having id equal to requested id
+	 */
+	public ProjectModel getProjectDetails(int id) {
+		Session session = sessionFactory.getCurrentSession();
+		return (ProjectModel) session.get(ProjectModel.class, id);
+	}
+	
+	
+	
+	
 }

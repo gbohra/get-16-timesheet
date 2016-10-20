@@ -17,7 +17,7 @@ import com.timesheet.dao.model.Task;
 import com.timesheet.service.TaskService;
 @CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
-@RequestMapping(value="/api/v1/tasks")
+@RequestMapping(value="/api/v1")
 public class TaskController {
 	@Autowired
 	TaskService taskService;
@@ -26,22 +26,33 @@ public class TaskController {
 	 * This create a new task 
 	 * @param task - take parameter task and save
 	 */
-	@RequestMapping(value="/",method=RequestMethod.POST)
-	public boolean createTask(@RequestBody Task task){
-		System.out.println("this is task"+task);
+	@RequestMapping(value="/task",method=RequestMethod.POST)
+	@ResponseBody
+	public Task createTask(@RequestBody Task task){
 		return taskService.createTask(task);
 	}
+	
+	
+	@RequestMapping(value="/task",method=RequestMethod.PUT)
+	@ResponseBody
+	public Task updateTask(@RequestBody Task task){
+		return taskService.updateTask(task);
+	}
+	
+	
+	
+	
 	/**
 	 * get all users task according to id
 	 * @param userId - users id 
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
+	@RequestMapping(value="/user/{id}/task",method=RequestMethod.GET)
 	@ResponseBody
-	public List getUserTask(@PathVariable("id") int userId){
-		System.out.println("this is dhbsdb"+userId);
-		return taskService.getUserTask(userId);
+	public List getTask(@PathVariable("id") int userId){
+		System.out.println(""+userId);
+		return taskService.getTask(userId);
 	}
 	/**
 	 * getting user's task by usrs's id and date 
@@ -49,9 +60,9 @@ public class TaskController {
 	 * @param dates - date as a string  
 	 */
 	@SuppressWarnings("rawtypes")
-	@RequestMapping(value="/{id}/{date}",method=RequestMethod.GET)
+	@RequestMapping(value="/user/{id}/{date}/task",method=RequestMethod.GET)
 	@ResponseBody
-	public List getUserTaskByDate(@PathVariable("id") int userId,@PathVariable("date") String dates){
+	public List getTaskByDate(@PathVariable("id") int userId,@PathVariable("date") String dates){
 		System.out.println("this is in /getUser/{id}/{date}");
 		System.out.println(userId);
 		System.out.println(dates);
