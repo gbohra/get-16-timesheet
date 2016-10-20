@@ -14,52 +14,52 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.timesheet.dao.model.UserModel;
 
 /**
- * 
+ *
  * @author Avinash
- * user's operation are come here 
+ * user's operation are come here
  */
 @Repository
 @Transactional
 public class UserDao {
-	
+
 	@Autowired
 	private SessionFactory sessionFactory;
-	
+
 	 public SessionFactory getSessionFactory() {
 	        return sessionFactory;
 	 }
-	 
+
 	 public void setSessionFactory(SessionFactory sessionFactory) {
 	        this.sessionFactory = sessionFactory;
 	 }
 	/**
-	 * 
-	 * @param user - user detail object 
+	 *
+	 * @param user - user detail object
 	 * @return true if object save successfully else return false.
 	 */
 	 @ResponseBody
 	public boolean insert(UserModel user){
 		System.out.println("this is user dao");
 		try{
-		// creating a session 	
+		// creating a session
 		Session session = this.sessionFactory.getCurrentSession();
 		 session.save(user);
 		 return true;
 		}
 		catch(Exception e){
-			
+
 			return false;
 		}
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * @param user - user object contain user detail
 	 * @return - true if delete successfully else return false
 	 */
 	@ResponseBody
 	public boolean delete(UserModel user){
-		
+
 		try{
 			// creating a session
 			Session session = this.sessionFactory.getCurrentSession();
@@ -67,43 +67,43 @@ public class UserDao {
 				return true;
 			}
 			catch(Exception e){
-				
+
 				return false;
 			}
-	}  
+	}
 
 	/**
-	 * 
+	 *
 	 * @param id - user's id
 	 * @return user's detail
 	 */
-	
+
 	@SuppressWarnings("rawtypes")
 	public List getUserInfo(int id){
 		System.out.println("this is user dao"+id);
 		Session session = this.sessionFactory.getCurrentSession();
 		Query query = session.createQuery("from UserModel m where m.id=:id");
 		query.setParameter("id", id);
-		List list =  (List) query.list();  
+		List list =  (List) query.list();
 		return list;
 	}
-	 
+
 	/**
-	 * 
+	 *
 	 * @param id -users id
 	 * @return List of project belong to this user
 	 */
-	
+
 	//@ResponseBody
 	/*public List getUserProjects(int id){
 		Session session = this.sessionFactory.getCurrentSession();
 		//List<Project> project = (project) session.createCriteria(Project.class).add(Restrictions.eq("created_by",id)).list();
 		return projects
 	}*/
-	
+
 	/**
-	 * 
-	 * @param user 
+	 *
+	 * @param user
 	 * @return  true if update successfully,else false
 	 */
 	@ResponseBody
@@ -120,9 +120,9 @@ public class UserDao {
 		}
 	}
 	/**
-	 * Use to get id of user if present 
+	 * Use to get id of user if present
 	 * @param email - email of user
-	 * @return return id if user is present else return 0  
+	 * @return return id if user is present else return 0
 	 */
 	@SuppressWarnings("rawtypes")
 	public int checkEmail(String email){
@@ -134,12 +134,12 @@ public class UserDao {
 			List list = query.list();
 			if(list.size() > 0){
 				//System.out.println("this is list's 0th element"+list.get(0));
-				return (int) list.get(0);
+				return (int) list.get(0).id;
 			}
 			else{
 				return 0;
 			}
-			
+
 		}
 		catch(Exception e){
 			return -1;
