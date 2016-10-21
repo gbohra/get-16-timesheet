@@ -54,7 +54,7 @@ public class OrganizationController {
 	public Organization getOrganization(@PathVariable("id") int id, ServletRequest request){
 		
 		Organization organization = organizationService.getOrganization(id);
-		if(new BasicAuthorization(request).organizationRead(organization)){
+		if(BasicAuthorization.isOrganizationReadAllowed(organization, request)){
 			return organization;
 		}else{
 			// error message should be show to front end
@@ -73,7 +73,7 @@ public class OrganizationController {
 	public Organization updateOrganization(@RequestBody Organization organization, ServletRequest request){
 		System.out.println("this is "+organization);
 		Organization org = organizationService.getOrganization(organization.getId());
-		new BasicAuthorization(request).organizationUpdate(organization);
+		BasicAuthorization.isOrganizationUpdateAllowed(organization, request);
 		return organizationService.updateOrganization(organization);
 	}
 	
