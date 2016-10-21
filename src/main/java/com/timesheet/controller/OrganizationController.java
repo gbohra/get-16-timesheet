@@ -52,6 +52,7 @@ public class OrganizationController {
 	@RequestMapping(value="/{id}")
 	@ResponseBody
 	public Organization getOrganization(@PathVariable("id") int id, ServletRequest request){
+		
 		Organization organization = organizationService.getOrganization(id);
 		if(new BasicAuthorization(request).organizationRead(organization)){
 			return organization;

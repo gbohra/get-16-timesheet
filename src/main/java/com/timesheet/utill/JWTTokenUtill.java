@@ -33,8 +33,7 @@ public final class JWTTokenUtill {
 
 			// Serialize to compact form, produces something like
 			// eyJhbGciOiJIUzI1NiJ9.SGVsbG8sIHdvcmxkIQ.onO9Ihudz3WkiauDO2Uhyuz0Y18UASXlSc1eS0NkWyA
-			String s = signedJWT.serialize();
-			return s;	
+			return signedJWT.serialize();	
 		}catch(Exception e){
 			 e.printStackTrace();
 			return null;

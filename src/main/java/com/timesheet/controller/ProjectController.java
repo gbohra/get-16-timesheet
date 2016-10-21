@@ -3,6 +3,8 @@ package com.timesheet.controller;
 //import all required classes
 import java.util.List;
 
+import javax.servlet.ServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.ProjectModel;
 import com.timesheet.service.ProjectService;
+import com.timesheet.utill.BasicAuthorization;
 
 /**
  * Controller for accessing ProjectService
@@ -72,9 +75,15 @@ public class ProjectController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	@ResponseBody
-	public ProjectModel updateProject(@RequestBody ProjectModel projectModel) {
-		System.out.println("this is update project");
-		return projectService.updateProject(projectModel);
+	public ProjectModel updateProject(@RequestBody ProjectModel projectTemp, ServletRequest request) {
+		ProjectModel projectModel = projectService.getProjectDetails(projectTemp.getId());
+		if(new BasicAuthorization(request).isProjectUpdateAllowed(projectModel)){
+			System.out.println("this is update project");
+			return projectService.updateProject(projectModel);
+		}else{
+			// error message should be show to front end
+			return null; 
+		}
 	}
 	
 	/**
@@ -83,19 +92,43 @@ public class ProjectController {
 	 * @return ResponseEntity<String>
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteProject(@PathVariable("id") int id) {
-		
-    	return new ResponseEntity<String>(HttpStatus.OK);    	
+    public ResponseEntity<String> deleteProject(@PathVariable("id") int id, ServletRequest request) {
+		ProjectModel projectModel = projectService.getProjectDetails(id);
+		if(new BasicAuthorization(request).isProjectDeleteAllowed(projectModel)){
+			projectService.deleteProject(projectModel.getId());
+			return new ResponseEntity<String>(HttpStatus.OK);
+		}else{
+			// error message should be show to front end
+			return null; 
+		}  	
     }
+	
+	/**
+	 * get project details by id
+	 * @param id : id of project to be retrieved
+	 * @return ResponseEntity<ProjectModel>
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ProjectModel getProjectDetails(@PathVariable("id") int id, ServletRequest request) {
+		ProjectModel projectModel = projectService.getProjectDetails(id);
+		if(new BasicAuthorization(request).isProjectReadAllowed(projectModel)){
+			return projectModel;
+		}else{
+			// error message should be show to front end
+			return null; 
+		}  	
+	}
 	
 	/**
 	 * get list of all projects
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping(value="/me", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<ProjectModel>> getAllProjects() {
+		
 		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),
 				HttpStatus.OK);
 	}
@@ -119,27 +152,11 @@ public class ProjectController {
 	 * get list of all projects
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
-	@SuppressWarnings("rawtypes")
-	@RequestMapping(value = "/getProjects/{user_id}" , method = RequestMethod.GET)
-	@ResponseBody
-	public List getProjects(@PathVariable("user_id") int user_id) {
-		return projectService.getProjects(user_id);
-	}
-	
-	/**
-	 * get project details by id
-	 * @param id : id of project to be retrieved
-	 * @return ResponseEntity<ProjectModel>
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public ProjectModel getProjectDetails(@PathVariable("id") int id) {
-		return projectService.getProjectDetails(id);
-	}
-	
-	
-	
-	
-	
+//	@SuppressWarnings("rawtypes")
+//	@RequestMapping(value = "/getProjects/{user_id}" , method = RequestMethod.GET)
+//	@ResponseBody
+//	public List getProjects(@PathVariable("user_id") int user_id) {
+//		return projectService.getProjects(user_id);
+//	}
 	
 }

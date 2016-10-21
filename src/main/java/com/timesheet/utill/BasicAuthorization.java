@@ -7,6 +7,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 
 import com.timesheet.dao.model.Organization;
+import com.timesheet.dao.model.ProjectModel;
 
 /**
  * @author admin
@@ -32,6 +33,24 @@ public class BasicAuthorization {
 		boolean isAllowed = false;
 		isAllowed = this.tokenInfo.getId() == organization.getCreatedBy();  
 		return isAllowed;
+	}
+	
+	public boolean isProjectUpdateAllowed(ProjectModel projectModel){
+		boolean isAllowed = false;
+		isAllowed = (this.tokenInfo.getId() == projectModel.getCreatedBy()); /* || user is a co-owner of project */
+		return isAllowed;
+	}
+	
+	public boolean isProjectDeleteAllowed(ProjectModel projectModel){
+		boolean isAllowed = false;
+		isAllowed = (this.tokenInfo.getId() == projectModel.getCreatedBy()); /* || user is a co-owner of project */
+		return isAllowed;
+	}
+	
+	public boolean isProjectReadAllowed(ProjectModel projectModel){
+		boolean isAllowed = false;
+//		isAllowed = (this.tokenInfo.getId() == projectModel.getCreatedBy()); /* || user is a co-owner of project || user is a member of the project*/
+		return true;
 	}
 
 }
