@@ -25,17 +25,7 @@ public class ProjectService {
 	@Autowired
 	private ProjectDao projectDao;
 	
-	@Autowired
-	private ApplicationContext applicationContext;
-
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
-
-	public void setApplicationContext(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-	}
-
+	
 	/**
 	 * get projectDAO
 	 * 
@@ -71,7 +61,7 @@ public class ProjectService {
      * @return ProjectModel : new created reference of ProjectModel
      */
 	public ProjectVO createProject(ProjectVO projectVO) {
-		ProjectModel projectModel =  applicationContext.getBean(ProjectModel.class);
+		ProjectModel projectModel =  new ProjectModel();
 		projectModel = populateVOIntoModel(projectVO, projectModel);
 		projectModel = projectDao.createProject(projectModel);
 		return populateModelIntoVO(projectVO, projectModel);
@@ -83,7 +73,7 @@ public class ProjectService {
      * @return ProjectModel : new updated reference of ProjectModel
 	 */
 	public ProjectVO updateProject(ProjectVO projectVO) {
-		ProjectModel projectModel =  applicationContext.getBean(ProjectModel.class);
+		ProjectModel projectModel =  new ProjectModel();
 		projectModel = populateVOIntoModel(projectVO, projectModel);
 		projectModel = projectDao.updateProject(projectModel);
 		return populateModelIntoVO(projectVO, projectModel);
@@ -118,7 +108,7 @@ public class ProjectService {
 	 * @return ProjectModel : project model having id equal to requested id
 	 */
 	public ProjectVO getProjectDetails(ProjectVO projectVO) {
-		ProjectModel projectModel =  applicationContext.getBean(ProjectModel.class);
+		ProjectModel projectModel =  new ProjectModel();
 		projectModel = populateVOIntoModel(projectVO, projectModel);
 		projectModel = projectDao.getProjectDetails(projectModel);
 		return populateModelIntoVO(projectVO, projectModel);

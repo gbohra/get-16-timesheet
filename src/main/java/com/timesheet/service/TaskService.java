@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.TaskDao;
@@ -18,8 +17,7 @@ public class TaskService {
 	@Autowired
 	private TaskDao taskDao;
 	
-	@Autowired
-	ApplicationContext applicationContext;
+	
 	
 	public TaskDao getTaskDao() {
 		return taskDao;
@@ -40,21 +38,13 @@ public class TaskService {
 	 * @param task - take parameter task and save
 	 */
 	public boolean createTask(TaskVO taskvo){
-		TaskModel taskModel =  applicationContext.getBean(TaskModel.class);
+		TaskModel taskModel =  new TaskModel();
 		populateVOIntoModel(taskvo, taskModel);
 		return taskDao.createTask(taskModel);
 	}
 	
 	
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
-
-
-	public void setApplicationContext(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-	}
-
+	
 
 	/**
 	 * return a user's all task

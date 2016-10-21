@@ -13,8 +13,7 @@ import org.springframework.stereotype.Component;
 
 
 @Entity
-@Component
-@Table(name="Organization")
+@Table(name="organization")
 public class OrganizationModel {
 
 	@Id

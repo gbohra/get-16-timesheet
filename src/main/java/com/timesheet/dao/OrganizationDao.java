@@ -32,6 +32,7 @@ public class OrganizationDao {
 	 * @return true if successfully added else return false
 	 */
 	public OrganizationModel addOrganization(OrganizationModel organization){
+		System.out.println(" i am in dao");
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
 			session.save(organization);
@@ -49,7 +50,7 @@ public class OrganizationDao {
 	public List getOrganizations(){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "From Organization";
+			String hql = "From OrganizationModel";
 			Query query = session.createQuery(hql);
 //			query.setParameter("user_id", id);
 			System.out.println(query.list());
@@ -87,11 +88,12 @@ public class OrganizationDao {
 	public OrganizationModel getOrganization(OrganizationModel organizationModel){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "From Organization o WHERE  o.id = :id";
+			String hql = "From OrganizationModel o WHERE  o.id = :id";
 			Query query = session.createQuery(hql);
 			query.setParameter("id", organizationModel.getId());
 			System.out.println(query.list());
-			List list = query.list() ;
+			@SuppressWarnings("unchecked")
+			List<OrganizationModel> list = query.list() ;
 			
 			return (OrganizationModel) list.get(0);
 		}catch(Exception e){

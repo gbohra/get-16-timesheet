@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.OrganizationDao;
@@ -16,19 +15,6 @@ public class OrganizationService {
 	
 	@Autowired
 	OrganizationDao organizationDao;
-	
-	@Autowired
-	ApplicationContext applicationContext;
-	
-	public ApplicationContext getApplicationContext() {
-		return applicationContext;
-	}
-
-
-	public void setApplicationContext(ApplicationContext applicationContext) {
-		this.applicationContext = applicationContext;
-	}
-
 
 	/**
 	 * This is getter of organizationDao
@@ -61,7 +47,9 @@ public class OrganizationService {
 	 * @param organization
 	 */
 	public OrganizationVO addOrganizaion(OrganizationVO organizationVO){
-		OrganizationModel organizationModel =  applicationContext.getBean(OrganizationModel.class);
+		System.out.println("before bean");
+		OrganizationModel organizationModel =  new OrganizationModel();
+		System.out.println("after bean");
 		populateVOIntoModel(organizationVO, organizationModel);
 		organizationModel = organizationDao.addOrganization(organizationModel);
 		populateModelIntoVO(organizationVO, organizationModel);
@@ -84,7 +72,7 @@ public class OrganizationService {
 	 * @return List of Organization
 	 */
 	public OrganizationVO updateOrganization(OrganizationVO organizationVO){
-		OrganizationModel organizationModel =  applicationContext.getBean(OrganizationModel.class);
+		OrganizationModel organizationModel =  new OrganizationModel();
 		populateVOIntoModel(organizationVO, organizationModel);
 		organizationModel =organizationDao.updateOrganization(organizationModel);
 		populateModelIntoVO(organizationVO, organizationModel);
@@ -97,7 +85,7 @@ public class OrganizationService {
 	 * @return List of Organization
 	 */
 	public OrganizationVO getOrganization(OrganizationVO organizationVO){
-		OrganizationModel organizationModel =  applicationContext.getBean(OrganizationModel.class);
+		OrganizationModel organizationModel =  new OrganizationModel();
 		populateVOIntoModel(organizationVO, organizationModel);
 		organizationModel =organizationDao.getOrganization(organizationModel);
 		populateModelIntoVO(organizationVO, organizationModel);

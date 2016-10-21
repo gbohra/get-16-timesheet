@@ -5,8 +5,7 @@ import java.util.Date;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
+
 import org.springframework.stereotype.Component;
 
 
@@ -19,28 +18,27 @@ public class OrganizationVO {
 		@Size(min=2, max=30)
 		private String name;
 
-		@NotBlank
+		@NotNull
 		 @Size(min=10)
 		private String description;
 
-		@NotBlank
+		@NotNull
 		 @Size(min=10)
 		private String address;
 
-		@NotBlank
-		 @Email
+		@NotNull
 		private String contact;
 
-		
+		@NotNull
 		private int createdBy;
 
-		 
+		@NotNull
 		private Date createdDate;
 
-		
+		@NotNull
 		private int updatedBy;
 
-		
+		@NotNull
 		private Date updatedDate;
 
 		public int getId() {

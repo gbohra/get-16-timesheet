@@ -49,6 +49,7 @@ public class OrganizationController {
 	@RequestMapping(method=RequestMethod.POST)
 	@ResponseBody
 	public OrganizationVO addOrganizaion(@RequestBody @Validated OrganizationVO organizationVO , BindingResult bindingResult){
+		System.out.println("Binding res"+bindingResult);
 		System.out.println(organizationVO);
 		if (bindingResult.hasErrors()) {
 			return organizationVO;
@@ -76,8 +77,8 @@ public class OrganizationController {
 	 */
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	@ResponseBody
-	public OrganizationVO updateOrganization(@RequestBody @Validated OrganizationVO organizationVO , BindingResult bindingResult){
-		System.out.println(organizationVO);
+	public OrganizationVO updateOrganization(@PathVariable("id") int id ,@RequestBody @Validated OrganizationVO organizationVO , BindingResult bindingResult){
+		organizationVO.setId(id);
 		if (bindingResult.hasErrors()) {
 			return organizationVO;
 		} else {
