@@ -3,14 +3,10 @@ package com.timesheet.controller;
 //import all required classes
 import java.util.List;
 
-import javax.servlet.ServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -20,8 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.ProjectModel;
 import com.timesheet.service.ProjectService;
-import com.timesheet.utill.BasicAuthorization;
-import com.timesheet.vo.ProjectVO;
 
 /**
  * Controller for accessing ProjectService
@@ -33,16 +27,10 @@ import com.timesheet.vo.ProjectVO;
 @Controller
 @RequestMapping("/api/v1/projects")
 public class ProjectController {
-
+	
 	// create bean of ProjectService
 	@Autowired
 	private ProjectService projectService;
-	
-	
-	
-	@Autowired
-	private ProjectVO projectVO;
-	
 	
 	/**
 	 * get projectService
@@ -62,30 +50,20 @@ public class ProjectController {
 	public void setProjectService(ProjectService projectService) {
 		this.projectService = projectService;
 	}
-	
-	public ProjectVO getProjectVO() {
-		return projectVO;
-	}
-
-	public void setProjectVO(ProjectVO projectVO) {
-		this.projectVO = projectVO;
-	}
-
 
     /**
      *create a new project
      * @param projectModel
      * @return ResponseEntity<String> : String
      */
-	@RequestMapping(method = RequestMethod.POST)
+	@RequestMapping(value="",method = RequestMethod.POST)
 	@ResponseBody
-	public ProjectVO create(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult ) {
-		if(bindingResult.hasErrors()) {
-			return projectVO;
-		} else {
-			return projectService.createProject(projectVO);
-		}
+	public ProjectModel createProject(@RequestBody ProjectModel projectModel) {	
+		projectModel.setCreatedBy(1);
+		projectModel.setUpdatedBy(1);
+		return projectService.createProject(projectModel);
 	}
+	
 	/**
 	 * update project details
 	 * @param projectModel
@@ -94,15 +72,9 @@ public class ProjectController {
 	 */
 	@RequestMapping(value = "/", method = RequestMethod.PUT)
 	@ResponseBody
-	public ProjectVO updateProject(@RequestBody @Validated  ProjectVO projectVOTemp , BindingResult bindingResult, ServletRequest request) {
-		projectVO = projectService.getProjectDetails(projectVOTemp);
-		if(BasicAuthorization.isProjectUpdateAllowed(projectVO, request)){
-			System.out.println("this is update project");
-			return projectService.updateProject(projectVO);
-		}else{
-			// error message should be show to front end
-			return null; 
-		}
+	public ProjectModel updateProject(@RequestBody ProjectModel projectModel) {
+		System.out.println("this is update project");
+		return projectService.updateProject(projectModel);
 	}
 	
 	/**
@@ -111,45 +83,19 @@ public class ProjectController {
 	 * @return ResponseEntity<String>
 	 */
 	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<String> deleteProject(@PathVariable("id") int id, ServletRequest request) {
-		projectVO.setId(id);
-		projectVO = projectService.getProjectDetails(projectVO);
-		if(BasicAuthorization.isProjectDeleteAllowed(projectVO, request)){
-			projectService.deleteProject(projectVO.getId());
-			return new ResponseEntity<String>(HttpStatus.OK);
-		}else{
-			// error message should be show to front end
-			return null; 
-		}  	
+    public ResponseEntity<String> deleteProject(@PathVariable("id") int id) {
+		
+    	return new ResponseEntity<String>(HttpStatus.OK);    	
     }
-	
-	/**
-	 * get project details by id
-	 * @param id : id of project to be retrieved
-	 * @return ResponseEntity<ProjectModel>
-	 */
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
-	@ResponseBody
-	public ProjectVO getProjectDetails(@PathVariable("id") int id, ServletRequest request) {
-		projectVO.setId(id);
-		projectVO = projectService.getProjectDetails(projectVO);
-		if(BasicAuthorization.isProjectReadAllowed(projectVO, request)){
-			return projectVO;
-		}else{
-			// error message should be show to front end
-			return null; 
-		}  	
-	}
 	
 	/**
 	 * get list of all projects
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value="/me", method = RequestMethod.GET)
+	@RequestMapping(method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<ProjectModel>> getAllProjects() {
-		
 		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),
 				HttpStatus.OK);
 	}
@@ -173,11 +119,27 @@ public class ProjectController {
 	 * get list of all projects
 	 * @return ResponseEntity<List<ProjectModel>>
 	 */
-//	@SuppressWarnings("rawtypes")
-//	@RequestMapping(value = "/getProjects/{user_id}" , method = RequestMethod.GET)
-//	@ResponseBody
-//	public List getProjects(@PathVariable("user_id") int user_id) {
-//		return projectService.getProjects(user_id);
-//	}
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value = "/getProjects/{user_id}" , method = RequestMethod.GET)
+	@ResponseBody
+	public List getProjects(@PathVariable("user_id") int user_id) {
+		return projectService.getProjects(user_id);
+	}
+	
+	/**
+	 * get project details by id
+	 * @param id : id of project to be retrieved
+	 * @return ResponseEntity<ProjectModel>
+	 */
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	@ResponseBody
+	public ProjectModel getProjectDetails(@PathVariable("id") int id) {
+		return projectService.getProjectDetails(id);
+	}
+	
+	
+	
+	
+	
 	
 }

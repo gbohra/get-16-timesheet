@@ -31,6 +31,20 @@ public class Organization {
 	@Column(name = "contact")
 	private String contact;
 
+	/**
+	 * @return the address
+	 */
+	public String getAddress() {
+		return address;
+	}
+
+	/**
+	 * @param address the address to set
+	 */
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
 	@Column(name = "created_by")
 	private int createdBy;
 

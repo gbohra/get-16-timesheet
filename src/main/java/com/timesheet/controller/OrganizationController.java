@@ -25,7 +25,7 @@ import com.timesheet.utill.TokenInfo;
  * @author Avinash
  * This is handle requests of Organization
  */
-@CrossOrigin(origins = "http://192.168.100.113:3000")
+@CrossOrigin(origins = "http://192.168.100.113:3000")	
 @Controller
 @RequestMapping(value="/api/v1/organizations")
 public class OrganizationController {
@@ -37,11 +37,13 @@ public class OrganizationController {
 	 * This function add a organization
 	 * @param organization 
 	 */
-	@RequestMapping(value="/",method=RequestMethod.POST)
+	@RequestMapping(value="",method=RequestMethod.POST)
 	@ResponseBody
 	public Organization addOrganizaion(@RequestBody Organization organization,ServletRequest request){
-		System.out.println(organization);
-		organization.setCreatedBy(new TokenData(request).getUserId());
+		organization.setCreatedBy(1);
+		organization.setUpdatedBy(1);
+		System.out.println("this is org add "  + organization);
+		//organization.setCreatedBy(new TokenData(request).getUserId());
 		return organizationService.addOrganizaion(organization);
 	}
 	/**
@@ -52,9 +54,8 @@ public class OrganizationController {
 	@RequestMapping(value="/{id}")
 	@ResponseBody
 	public Organization getOrganization(@PathVariable("id") int id, ServletRequest request){
-		
 		Organization organization = organizationService.getOrganization(id);
-		if(BasicAuthorization.isOrganizationReadAllowed(organization, request)){
+		if(new BasicAuthorization(request).organizationRead(organization)){
 			return organization;
 		}else{
 			// error message should be show to front end
@@ -73,7 +74,7 @@ public class OrganizationController {
 	public Organization updateOrganization(@RequestBody Organization organization, ServletRequest request){
 		System.out.println("this is "+organization);
 		Organization org = organizationService.getOrganization(organization.getId());
-		BasicAuthorization.isOrganizationUpdateAllowed(organization, request);
+		new BasicAuthorization(request).organizationUpdate(organization);
 		return organizationService.updateOrganization(organization);
 	}
 	

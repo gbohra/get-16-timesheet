@@ -65,7 +65,7 @@ public class SocialLogin {
 						clientSecrets.getDetails().getClientId(),
 						clientSecrets.getDetails().getClientSecret(),
 						code,
-						"http://localhost:8080/TimesheetVersion1/oauth/callback").execute();
+						"http://localhost:8080/TimeSheet/oauth/callback").execute();
 
 		// Specify the same redirect URI that you use with your web
 		// app. If you don't have a web version of your app, you can
@@ -89,7 +89,10 @@ public class SocialLogin {
 		System.out.println(name);
 		String pictureUrl = (String) payload.get("picture");
 		System.out.println("user's email "+email);
+		
 		int id = userService.checkEmail(email);
+		
+		System.out.println("this is id"+id);
 		// now store that user in data base and get id from it 
 		System.out.println("this is user's id "+id);
 		TokenInfo token = new TokenInfo();
@@ -153,21 +156,36 @@ public class SocialLogin {
 	}
 	
 	
-	@RequestMapping(value="/validate/{token}",method=RequestMethod.POST)
+	@RequestMapping(value="/validate",method=RequestMethod.POST)
 	@ResponseBody
-	public String validate(@PathVariable("token") String token){
-		System.out.println("Token "+token);
-		TokenInfo tokenInfo = JWTTokenUtill.getDecrypt(token);
-		return "{'user_name':'name1','email':'asdasd@fff.com', 'token':'"+token+"'}";
-//		if(tokenInfo != null){
-//			if(tokenInfo.getEmail() == null || tokenInfo.getEmail().equals("")){
-//				return false;
-//			}else{
-//				return true;
-//			}
-//		}else{
-//			return false;
-//		}
+	public TokenInfo validate(@RequestBody String token){
+		try{
+			System.out.println("Token "+token);
+			// if wrong token received then this throw error/exception
+			TokenInfo tokenInfo = JWTTokenUtill.getDecrypt(token);
+			System.out.println("token info"+tokenInfo.getAccessToken());
+			System.out.println("token email"+tokenInfo.getEmail());
+			if(tokenInfo != null){
+				if(tokenInfo.getEmail() == null || tokenInfo.getEmail().equals("")){
+					System.out.println(" i am in nukk");
+					return null;
+				}else{
+					
+					tokenInfo.setAccessToken(token);
+					System.out.println("token set "+ tokenInfo.getAccessToken());
+					System.out.println("token name"+tokenInfo.getName());
+					System.out.println("this is email"+tokenInfo.getEmail());
+					return tokenInfo;
+				}
+			}else{
+				System.out.println(" i am in nukk");
+				return null;
+			}
+		}catch(Exception e){
+			System.out.println(" i am in nukk");
+			return null;
+		}
+		
 		
 	}
 }

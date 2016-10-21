@@ -126,16 +126,18 @@ public class UserDao {
 	 */
 	@SuppressWarnings("rawtypes")
 	public int checkEmail(String email){
+		System.out.println("i am in DAO"+email);
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "id FROM User u WHERE u.email=:email";
+			String hql = "FROM UserModel u WHERE u.email=:email";
 			Query query = session.createQuery(hql);
 			query.setParameter("email", email);
 			List list = query.list();
+			System.out.println("This is list size"+list.size());
 			if(list.size() > 0){
 				//System.out.println("this is list's 0th element"+list.get(0));
-//				return (int) list.get(0);
-				return 3;
+				UserModel userModel = (UserModel) list.get(0);
+				return userModel.getId();
 			}
 			else{
 				return 0;
@@ -143,6 +145,7 @@ public class UserDao {
 			
 		}
 		catch(Exception e){
+			e.printStackTrace();
 			return -1;
 		}
 	}

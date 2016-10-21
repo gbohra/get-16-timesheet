@@ -74,6 +74,7 @@ public class UserService {
 	
 
 	public int checkEmail(String email){
+		System.out.println("this is email"+email);
 		return userDao.checkEmail(email);
 	}
 }

@@ -144,9 +144,9 @@ public class ProjectDao {
 	 *            : id of project to be fetched
 	 * @return ProjectModel : project model having id equal to requested id
 	 */
-	public ProjectModel getProjectDetails(ProjectModel projectModel) {
+	public ProjectModel getProjectDetails(int id) {
 		Session session = sessionFactory.getCurrentSession();
-		return (ProjectModel) session.get(ProjectModel.class, projectModel.getId());
+		return (ProjectModel) session.get(ProjectModel.class, id);
 	}
 	
 	
