@@ -1,6 +1,8 @@
 package com.timesheet.dao.model;
 
-import java.sql.Date;
+
+
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,7 +25,32 @@ public class UserModel {
 	    public int getId() {
 			return id;
 		}
+	    
+		@Column(name="first_name")
+	    private String firstName;
 
+	    @Column(name="last_name")
+	    private String lastName;
+	    
+	    @Column(name="email")
+	    private String email;
+	    
+	    @Column(name="password")
+	    private String password;
+	    
+
+		@Column(name="created_date")
+		@JsonFormat(pattern="yyyy-MM-dd")
+		private Date createdDate;
+
+		@Column(name="updated_date")
+		@JsonFormat(pattern="yyyy-MM-dd")
+		private Date updatedDate;
+
+		@Column(name="refresh_token")
+		private String refreshToken;
+		
+		
 		public void setId(int id) {
 			this.id = id;
 		}
@@ -60,40 +87,34 @@ public class UserModel {
 			this.password = password;
 		}
 
-		public Date getCreated_date() {
-			return created_date;
+		public Date getCreatedDate() {
+			return createdDate;
 		}
 
-		public void setCreated_date(Date created_date) {
-			this.created_date = created_date;
+		public void setCreatedDate(Date createdDate) {
+			this.createdDate = createdDate;
 		}
 
-		public Date getUpdated_date() {
-			return updated_date;
+		public Date getUpdatedDate() {
+			return updatedDate;
 		}
 
-		public void setUpdated_date(Date updated_date) {
-			this.updated_date = updated_date;
+		public void setUpdatedDate(Date updatedDate) {
+			this.updatedDate = updatedDate;
 		}
 
-		@Column(name="first_name")
-	    private String firstName;
+		/**
+		 * @return the refreshToken
+		 */
+		public String getRefreshToken() {
+			return refreshToken;
+		}
 
-	    @Column(name="last_name")
-	    private String lastName;
-	    
-	    @Column(name="email")
-	    private String email;
-	    
-	    @Column(name="password")
-	    private String password;
-	    
+		/**
+		 * @param refreshToken the refreshToken to set
+		 */
+		public void setRefreshToken(String refreshToken) {
+			this.refreshToken = refreshToken;
+		}
 
-		@Column(name="created_date")
-		@JsonFormat(pattern="yyyy-MM-dd")
-		private Date created_date;
-
-		@Column(name="updated_date")
-		@JsonFormat(pattern="yyyy-MM-dd")
-		private Date updated_date;
 }

@@ -1,21 +1,20 @@
 package com.timesheet.controller;
 
-import java.sql.Date;
+import java.util.List;
 
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.timesheet.dao.UserDao;
 import com.timesheet.dao.model.UserModel;
 import com.timesheet.service.UserService;
-
-
+@CrossOrigin(origins = "http://localhost:3000")
 @Controller
-@RequestMapping(value="/timesheet")
+@RequestMapping(value="api/v1/users")
 public class UserController {
 	
 	@Autowired
@@ -26,27 +25,23 @@ public class UserController {
 	 * This method send data to DAO
 	 * @param user - user detail pojo 
 	 */
-	@RequestMapping(value="/users")
-	public boolean insert(/*UserModel user*/){
-		//System.out.println("this is user controller");
-		UserModel user = new UserModel();
-		user.setId(1);
-		user.setFirstName("fdjvdffb");
-		user.setLastName("vbbvu");
-		user.setEmail("hbdfbvfvb");
-		user.setPassword("kfjdbjbv");
-		Date date = new Date(2000,1,1);
-		user.setCreated_date(date);
-		user.setUpdated_date(date);
-		System.out.println("controler" +user);
-		return userService.insert(user);	
+	@RequestMapping(value="/")
+	@ResponseBody
+	public String insert(UserModel user){
+		if (userService.insert(user)){
+			return "success";
+		}
+		else{
+			return "failed";
+		}
 	}
 	/**
 	 * This is use to Delete user detail into user's table.
 	 * This method send data to DAO
 	 * @param user - user detail pojo 
 	 */
-	@RequestMapping(name="/users",method=RequestMethod.DELETE)
+	@RequestMapping(name="/",method=RequestMethod.DELETE)
+	@ResponseBody
 	public boolean delete(UserModel user){
 		return userService.insert(user);	
 	}
@@ -56,22 +51,26 @@ public class UserController {
 	 * @param user
 	 * @return  true if update successfully,else false
 	 */
-	@RequestMapping(name="/users/{id}",method=RequestMethod.PUT)
+	@RequestMapping(name="/{id}",method=RequestMethod.PUT)
+	@ResponseBody
 	public boolean update(UserModel user){
 		return userService.update(user);
 	}
+	
 	
 	/**
 	 * 
 	 * @param id - users id
 	 * @return - UserModel if user present 
 	 */
-	@RequestMapping(value="/users/{id}")
-	public UserModel getUserData(@PathVariable("id")int id){
+	
+	@SuppressWarnings("rawtypes")
+	@RequestMapping(value="/{id}",method=RequestMethod.GET)
+	@ResponseBody
+	public List getUserData(@PathVariable("id")int id){
 		//System.out.println("this is get user data");
 		//System.out.println("this is id");
-		System.out.println("this is get user contrller ");
-		System.out.println(userService.getUserData(id));
+		System.out.println("this is get user contrller " + id);
 		return userService.getUserData(id);
 	}
 	/*
