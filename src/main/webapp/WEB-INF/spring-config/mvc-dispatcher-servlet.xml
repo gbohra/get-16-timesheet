@@ -11,14 +11,16 @@
 	<context:component-scan base-package="com.timesheet.service" />
 	
 	<mvc:annotation-driven />
+	
+	<mvc:resources mapping="/**" location="/WEB-INF/classes/static/" />
 
 	<!-- <mvc:resources mapping="/_ui/**" location="/ui/theme_default/" /> -->
 
-	<bean
+	<!--  bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/WEB-INF/pages/" />
 		<property name="suffix" value=".jsp" />
-	</bean>
+	</bean -->
 
 	<!-- <alias name="hibernateEmployeeDAO" alias="employeeDAO" /> <alias name="defaultEmployeeService" 
 		alias="employeeService" /> <alias name="defaultEmployeeFacade" alias="employeeFacade" 
