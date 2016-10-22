@@ -3,11 +3,13 @@ package com.timesheet.service;
 //import all required classes
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.ProjectDao;
 import com.timesheet.dao.model.ProjectModel;
+import com.timesheet.vo.ProjectVO;
 
 /**
  * Service Layer for accessing ProjectDAO
@@ -21,7 +23,8 @@ public class ProjectService {
 	// create bean of ProjectDAO
 	@Autowired
 	private ProjectDao projectDao;
-
+	
+	
 	/**
 	 * get projectDAO
 	 * 
@@ -40,27 +43,39 @@ public class ProjectService {
 	public void setProjectDao(ProjectDao projectDao) {
 		this.projectDao = projectDao;
 	}
+	
+	protected ProjectModel populateVOIntoModel(ProjectVO projectVO, ProjectModel projectModel) {
+        BeanUtils.copyProperties(projectVO, projectModel);
+        return projectModel;
+    }
 
-	/**
-	 * method to save the project details. Either create a new entry or update
-	 * existing depending upon the existing entries in the database
-	 * 
-	 * @param projectModel
-	 */
-	public ProjectModel createProject(ProjectModel projectModel) {
-		// create a new project if the requested id does not exist
-		return projectDao.createProject(projectModel);
+    protected ProjectVO populateModelIntoVO(ProjectVO projectVO, ProjectModel projectModel) {
+        BeanUtils.copyProperties(projectModel , projectVO);
+        return projectVO;
+    }
+
+	 /**
+     *create a new project
+     * @param projectModel
+     * @return ProjectModel : new created reference of ProjectModel
+     */
+	public ProjectVO createProject(ProjectVO projectVO) {
+		ProjectModel projectModel =  new ProjectModel();
+		projectModel = populateVOIntoModel(projectVO, projectModel);
+		projectModel = projectDao.createProject(projectModel);
+		return populateModelIntoVO(projectVO, projectModel);
 	}
 	
 	/**
-	 * method to save the project details. Either create a new entry or update
-	 * existing depending upon the existing entries in the database
-	 * 
-	 * @param projectModel
+	 * update project details
+     * @param projectModel
+     * @return ProjectModel : new updated reference of ProjectModel
 	 */
-	public ProjectModel updateProject(ProjectModel projectModel) {
-		// create a new project if the requested id does not exist
-		return projectDao.updateProject(projectModel);
+	public ProjectVO updateProject(ProjectVO projectVO) {
+		ProjectModel projectModel =  new ProjectModel();
+		projectModel = populateVOIntoModel(projectVO, projectModel);
+		projectModel = projectDao.updateProject(projectModel);
+		return populateModelIntoVO(projectVO, projectModel);
 	}
 
 	/**
@@ -77,7 +92,7 @@ public class ProjectService {
 	/**
 	 * get all projects
 	 * 
-	 * @return List<ProjectModel> : List of project models
+	 * @return List : List of project models
 	 */
 	@SuppressWarnings("rawtypes")
 	public List getAllProjects() {
@@ -91,36 +106,11 @@ public class ProjectService {
 	 *            : id of project to be retrieved
 	 * @return ProjectModel : project model having id equal to requested id
 	 */
-	public ProjectModel getProjectById(long id) {
-		return projectDao.getProjectById(id);
+	public ProjectVO getProjectDetails(ProjectVO projectVO) {
+		ProjectModel projectModel =  new ProjectModel();
+		projectModel = populateVOIntoModel(projectVO, projectModel);
+		projectModel = projectDao.getProjectDetails(projectModel);
+		return populateModelIntoVO(projectVO, projectModel);
 	}
-	
-	
-	
-	
-	/**
-	 * get all projects
-	 * 
-	 * @return List<ProjectModel> : List of project models
-	 */
-	public List getProjects(int user_id) {
-		return projectDao.getProjects(user_id);
-	}
-
-	/**
-	 * get project details by id
-	 * 
-	 * @param id
-	 *            : id of project to be retrieved
-	 * @return ProjectModel : project model having id equal to requested id
-	 */
-	public ProjectModel getProjectDetails(int id) {
-		return projectDao.getProjectDetails(id);
-	}
-	
-	
-	
-	
-	
 	
 }

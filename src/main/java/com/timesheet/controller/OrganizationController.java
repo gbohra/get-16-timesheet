@@ -3,7 +3,6 @@ package com.timesheet.controller;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
-import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,9 +16,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.timesheet.dao.model.Organization;
 import com.timesheet.service.OrganizationService;
 import com.timesheet.utill.BasicAuthorization;
-import com.timesheet.utill.JWTTokenUtill;
-import com.timesheet.utill.TokenData;
-import com.timesheet.utill.TokenInfo;
 /**
  * 
  * @author Avinash
@@ -55,7 +51,7 @@ public class OrganizationController {
 	@ResponseBody
 	public Organization getOrganization(@PathVariable("id") int id, ServletRequest request){
 		Organization organization = organizationService.getOrganization(id);
-		if(new BasicAuthorization(request).organizationRead(organization)){
+		if(BasicAuthorization.isOrganizationReadAllowed(organization, request)){
 			return organization;
 		}else{
 			// error message should be show to front end
@@ -74,7 +70,7 @@ public class OrganizationController {
 	public Organization updateOrganization(@RequestBody Organization organization, ServletRequest request){
 		System.out.println("this is "+organization);
 		Organization org = organizationService.getOrganization(organization.getId());
-		new BasicAuthorization(request).organizationUpdate(organization);
+		BasicAuthorization.isOrganizationUpdateAllowed(organization, request);
 		return organizationService.updateOrganization(organization);
 	}
 	
