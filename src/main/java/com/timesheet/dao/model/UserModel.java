@@ -14,7 +14,7 @@ import javax.persistence.Table;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Entity
-@Table(name="User")
+@Table(name="user")
 public class UserModel {
 	
 		@Id

@@ -13,6 +13,17 @@
 
 	<mvc:annotation-driven />
 	
+	<mvc:cors>
+		<mvc:mapping path="/**"
+		allowed-origins="*"
+		allow-credentials="true"
+		allowed-methods="GET, PUT, PATCH, POST, DELETE, HEAD, OPTIONS"
+		
+		allowed-headers="Content-Type, X-Requested-With, accept, token, Origin, Access-Control-Request-Method, Access-Control-Request-Headers"
+		exposed-headers="Access-Control-Allowed-Origin, Access-Control-Allowed-Credentials"
+		 />
+	</mvc:cors>
+	
 	<mvc:resources mapping="/**" location="/WEB-INF/classes/static/" />
 
 	<!-- <mvc:resources mapping="/_ui/**" location="/ui/theme_default/" /> -->
@@ -74,8 +85,14 @@
 			ref="hibernate4AnnotatedSessionFactory" />
 	</bean>
 	
+	<bean id="taskDurationDao" class="com.timesheet.dao.TaskDurationDao">
+		<property name="sessionFactory"
+			ref="hibernate4AnnotatedSessionFactory" />
+	</bean>
+	
 	<bean id="taskService" class="com.timesheet.service.TaskService">
 		<property name="taskDao" ref="taskDao" />
+		<property name="taskDurationDao" ref="taskDurationDao" />
 	</bean>
 	
 		<bean id="organizationDao" class="com.timesheet.dao.OrganizationDao">

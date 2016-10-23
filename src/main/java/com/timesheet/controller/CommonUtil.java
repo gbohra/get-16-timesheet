@@ -16,7 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * All the common things in application are come here 
  *
  */
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping(value="/api/v1/commonUtil")
 public class CommonUtil {
 	

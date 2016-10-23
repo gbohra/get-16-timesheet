@@ -21,7 +21,7 @@ import com.timesheet.service.LabelService;
  * This use for label operations
  */
 //use for cross origin request
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @Controller
 @RequestMapping("/api/v1/label")
 public class LabelController {

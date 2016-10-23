@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.ProjectDao;
 import com.timesheet.dao.model.ProjectModel;
+import com.timesheet.utill.CommonUtil;
+import com.timesheet.utill.JWTTokenUtill;
 import com.timesheet.vo.ProjectVO;
 
 /**
@@ -59,8 +61,10 @@ public class ProjectService {
      * @param projectModel
      * @return ProjectModel : new created reference of ProjectModel
      */
-	public ProjectVO createProject(ProjectVO projectVO) {
+	public ProjectVO createProject(ProjectVO projectVO, String JWTtoken) {
 		ProjectModel projectModel =  new ProjectModel();
+		projectVO.setCreatedBy(JWTTokenUtill.getDecrypt(JWTtoken).getId());
+		projectVO.setCreatedDate(CommonUtil.dateNow());
 		projectModel = populateVOIntoModel(projectVO, projectModel);
 		projectModel = projectDao.createProject(projectModel);
 		return populateModelIntoVO(projectVO, projectModel);

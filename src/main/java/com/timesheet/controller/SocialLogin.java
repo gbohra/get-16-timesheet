@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +30,7 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.timesheet.dao.model.UserModel;
 import com.timesheet.service.UserService;
+import com.timesheet.utill.CommonConstant;
 import com.timesheet.utill.JWTTokenUtill;
 import com.timesheet.utill.TokenInfo;
 /**
@@ -36,10 +39,19 @@ import com.timesheet.utill.TokenInfo;
  * This handle social login  
  */
 // use for cross origin request
-@CrossOrigin(origins = "http://192.168.100.113:3000")
+//@CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
 public class SocialLogin {
 	
+	public UserService getUserService() {
+		return userService;
+	}
+
+	public void setUserService(UserService userService) {
+		this.userService = userService;
+	}
+
+
 	@Autowired
 	UserService userService;
 
@@ -65,7 +77,7 @@ public class SocialLogin {
 						clientSecrets.getDetails().getClientId(),
 						clientSecrets.getDetails().getClientSecret(),
 						code,
-						"http://localhost:8080/TimeSheet/oauth/callback").execute();
+						CommonConstant.REDIRECT_URL).execute();
 
 		// Specify the same redirect URI that you use with your web
 		// app. If you don't have a web version of your app, you can
@@ -138,20 +150,20 @@ public class SocialLogin {
 		
 		
 		String encrString = JWTTokenUtill.getEncrypted(token);
-		return "redirect:" + "http://192.168.100.113:3000/?token="+encrString;
+		return "redirect:" + CommonConstant.REDIRECT_TOKEN_URL+"/?token="+encrString;
 	}
 	
 	@RequestMapping(value="/user/login")
-	public String userLogin(){
+	public String userLogin(ServletRequest request){
 		ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 		HttpSession session = attr.getRequest().getSession(true);
 		System.out.println("session email "+session.getAttribute("email"));
 		if (session.getAttribute("email") == null){
 			oauth = new GoogleOAuthUtil(session);
-			String redirectUrl = oauth.createLoginUrl("http://localhost:8080/TimeSheet/oauth/callback");
+			String redirectUrl = oauth.createLoginUrl(CommonConstant.REDIRECT_URL);
 			return "redirect:" + redirectUrl;
 		}else{
-			return "redirect:" + "http://localhost:8080/TimeSheet/";
+			return "redirect:" + request.getLocalName();
 		}	
 	}
 	

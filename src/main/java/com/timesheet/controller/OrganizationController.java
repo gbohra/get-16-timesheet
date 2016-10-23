@@ -21,7 +21,7 @@ import com.timesheet.utill.BasicAuthorization;
  * @author Avinash
  * This is handle requests of Organization
  */
-@CrossOrigin(origins = "http://192.168.100.113:3000")	
+//@CrossOrigin(origins = "http://192.168.100.113:3000")	
 @Controller
 @RequestMapping(value="/api/v1/organizations")
 public class OrganizationController {

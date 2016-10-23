@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-@Scope("prototype")
 public class ProjectVO {
 
 	private int id;

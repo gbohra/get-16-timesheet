@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.timesheet.dao.model.UserModel;
 import com.timesheet.service.UserService;
-@CrossOrigin(origins = "http://localhost:3000")
+//@CrossOrigin(origins = "http://localhost:3000")
 @Controller
 @RequestMapping(value="api/v1/users")
 public class UserController {

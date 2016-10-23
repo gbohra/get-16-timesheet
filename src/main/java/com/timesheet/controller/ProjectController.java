@@ -4,6 +4,7 @@ package com.timesheet.controller;
 import java.util.List;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,7 +30,7 @@ import com.timesheet.vo.ProjectVO;
  * @author simran
  *
  */
-@CrossOrigin(origins = "http://192.168.100.113:3000")
+//@CrossOrigin(origins = "http://192.168.100.113:3000")
 @Controller
 @RequestMapping("/api/v1/projects")
 public class ProjectController {
@@ -79,11 +80,11 @@ public class ProjectController {
      */
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public ProjectVO create(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult ) {
+	public ProjectVO create(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult, ServletRequest request) {
 		if(bindingResult.hasErrors()) {
 			return projectVO;
 		} else {
-			return projectService.createProject(projectVO);
+			return projectService.createProject(projectVO, ((HttpServletRequest) request).getHeader("token"));
 		}
 	}
 	/**
@@ -149,7 +150,7 @@ public class ProjectController {
 	@RequestMapping(value="/me", method = RequestMethod.GET)
 	@ResponseBody
 	public ResponseEntity<List<ProjectModel>> getAllProjects() {
-		
+		System.out.println("In project controller me ");
 		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),
 				HttpStatus.OK);
 	}
