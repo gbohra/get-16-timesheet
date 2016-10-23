@@ -34,7 +34,7 @@ public final class JWTTokenUtill {
 			// Serialize to compact form, produces something like
 			// eyJhbGciOiJIUzI1NiJ9.SGVsbG8sIHdvcmxkIQ.onO9Ihudz3WkiauDO2Uhyuz0Y18UASXlSc1eS0NkWyA
 			String s = signedJWT.serialize();
-			System.out.println("this is encrypt " + s);
+//			System.out.println("this is encrypt " + s);
 			return s;	
 		}catch(Exception e){
 			 e.printStackTrace();
@@ -45,12 +45,12 @@ public final class JWTTokenUtill {
 	public static TokenInfo getDecrypt(String encryptedText){
 		TokenInfo tokenInfo = new TokenInfo();
 		try{
-			System.out.println("decrpti "+ encryptedText);
+//			System.out.println("decrpti "+ encryptedText);
 		byte[] sharedSecret = new byte[32];
 		sharedSecret = "abcdefghijklmnopqrstuvwxyzabcdef".getBytes();
 		// Create HMAC signer
 		JWSSigner signer = new MACSigner(sharedSecret);
-		System.out.println(signer);
+//		System.out.println(signer);
 		
 		// Prepare JWT with claims set
 		JWTClaimsSet claimsSet = new JWTClaimsSet.Builder().build();
@@ -68,8 +68,8 @@ public final class JWTTokenUtill {
 		 tokenInfo.setId(signedJWT.getJWTClaimsSet().getIntegerClaim("user_id"));
 		 //tokenInfo.setId(Integer.parseInt(userId));
 		 tokenInfo.setEmail(signedJWT.getJWTClaimsSet().getStringClaim("email"));
-		 System.out.println("access token " + tokenInfo.getAccessToken());
-		 System.out.println("email id " +tokenInfo.getEmail());
+//		 System.out.println("access token " + tokenInfo.getAccessToken());
+//		 System.out.println("email id " +tokenInfo.getEmail());
 		return tokenInfo;
 		}
 		catch(Exception e){

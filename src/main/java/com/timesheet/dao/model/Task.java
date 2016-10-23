@@ -1,12 +1,17 @@
 package com.timesheet.dao.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -41,6 +46,9 @@ public class Task {
 	
 	@Column(name="priority")
 	private int priority;
+	
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "taskModel", cascade = CascadeType.ALL)
+	private List<TaskDurationModel> taskDurationModel;
 
 	public int getId() {
 		return id;
@@ -104,6 +112,14 @@ public class Task {
 
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+
+	public List<TaskDurationModel> getTaskDurationModel() {
+		return taskDurationModel;
+	}
+
+	public void setTaskDurationModel(List<TaskDurationModel> taskDurationModel) {
+		this.taskDurationModel = taskDurationModel;
 	}
 	
 	

@@ -128,10 +128,10 @@ public class ProjectDao {
 	 * @return List<ProjectModel> : List of project models
 	 */
 	@SuppressWarnings("unchecked")
-	public List<ProjectModel> getProjects(int user_id) {
+	public List<ProjectModel> getMyProjects(ProjectModel projectModel) {
 		Session session = sessionFactory.getCurrentSession();
 		Criteria criteria = session.createCriteria(ProjectModel.class);
-		criteria.add(Restrictions.eq("createdBy", user_id));
+		criteria.add(Restrictions.eq("createdBy", projectModel.getCreatedBy()));
 		criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 	    List<ProjectModel> projectModelList = criteria.list();
 	    return projectModelList;

@@ -39,11 +39,8 @@ public class ProjectController {
 	@Autowired
 	private ProjectService projectService;
 	
-	
-	
 	@Autowired
 	private ProjectVO projectVO;
-	
 	
 	/**
 	 * get projectService
@@ -80,11 +77,12 @@ public class ProjectController {
      */
 	@RequestMapping(method = RequestMethod.POST)
 	@ResponseBody
-	public ProjectVO create(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult, ServletRequest request) {
+	public ResponseEntity<ProjectVO> create(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult, ServletRequest request) {
 		if(bindingResult.hasErrors()) {
-			return projectVO;
+//			System.out.println(bindingResult.getAllErrors().get(0));
+			return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.UNPROCESSABLE_ENTITY);
 		} else {
-			return projectService.createProject(projectVO, ((HttpServletRequest) request).getHeader("token"));
+			return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.OK);
 		}
 	}
 	/**
@@ -93,16 +91,26 @@ public class ProjectController {
 	 * @param id : id of project to be updated
 	 * @return ResponseEntity<String>
 	 */
-	@RequestMapping(value = "/", method = RequestMethod.PUT)
+	@RequestMapping(method = RequestMethod.PUT)
 	@ResponseBody
-	public ProjectVO updateProject(@RequestBody @Validated  ProjectVO projectVOTemp , BindingResult bindingResult, ServletRequest request) {
+	public ResponseEntity<ProjectVO> updateProject(@RequestBody @Validated  ProjectVO projectVOTemp , BindingResult bindingResult, ServletRequest request) {
+//		System.out.println("ProjectVOTEMP   : "+projectVOTemp.getName());
+		// Gadbad Line
 		projectVO = projectService.getProjectDetails(projectVOTemp);
-		if(BasicAuthorization.isProjectUpdateAllowed(projectVO, request)){
-			System.out.println("this is update project");
-			return projectService.updateProject(projectVO);
+		// Gadbad Line
+//		System.out.println("3457834985743985745957349857");
+//		System.out.println("ProjectVO   :  " + projectVO.getName());
+//		System.out.println("ProjectVOTEMP   : "+projectVOTemp.getName());
+		if (BasicAuthorization.isProjectUpdateAllowed(projectVO, request)){
+			if (bindingResult.hasErrors()) {
+				return new ResponseEntity<ProjectVO>(projectVOTemp, HttpStatus.UNPROCESSABLE_ENTITY);
+			}else{
+				// update project
+				projectVO = projectService.updateProject(projectVOTemp);
+				return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.OK);
+			}
 		}else{
-			// error message should be show to front end
-			return null; 
+			return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
@@ -149,9 +157,8 @@ public class ProjectController {
 	@SuppressWarnings("unchecked")
 	@RequestMapping(value="/me", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<List<ProjectModel>> getAllProjects() {
-		System.out.println("In project controller me ");
-		return new ResponseEntity<List<ProjectModel>>(projectService.getAllProjects(),
+	public ResponseEntity<List<ProjectModel>> getMyProjects() {
+		return new ResponseEntity<List<ProjectModel>>(projectService.getMyProjects(),
 				HttpStatus.OK);
 	}
 	

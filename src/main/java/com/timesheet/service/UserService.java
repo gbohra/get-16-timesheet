@@ -67,7 +67,7 @@ public class UserService {
 	 * @return - UserModel if user present 
 	 */
 	@SuppressWarnings("rawtypes")
-	public List getUserData(int id){ 
+	public UserModel getUserData(int id){ 
 		System.out.println("this is usre service");
 		return userDao.getUserInfo(id);
 	}

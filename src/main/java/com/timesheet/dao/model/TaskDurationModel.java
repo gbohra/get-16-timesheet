@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.springframework.stereotype.Component;
@@ -22,8 +24,9 @@ public class TaskDurationModel {
 	@Column(name="id")
 	private int id;
 	
-	@Column(name="task_id")
-	private int taskId;
+	@ManyToOne
+	@JoinColumn(name="task_id")
+	private Task taskModel;
 	
 	@Column(name="date")
 	@JsonFormat(pattern="yyyy-MM-dd")
@@ -39,12 +42,7 @@ public class TaskDurationModel {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getTaskId() {
-		return taskId;
-	}
-	public void setTaskId(int taskId) {
-		this.taskId = taskId;
-	}
+
 	public Long getDate() {
 		return date;
 	}

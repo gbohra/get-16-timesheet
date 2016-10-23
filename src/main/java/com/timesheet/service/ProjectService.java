@@ -61,10 +61,12 @@ public class ProjectService {
      * @param projectModel
      * @return ProjectModel : new created reference of ProjectModel
      */
-	public ProjectVO createProject(ProjectVO projectVO, String JWTtoken) {
+	public ProjectVO createProject(ProjectVO projectVO) {
 		ProjectModel projectModel =  new ProjectModel();
-		projectVO.setCreatedBy(JWTTokenUtill.getDecrypt(JWTtoken).getId());
+		projectVO.setCreatedBy(CurrentUserService.getUserModel().getId());
+		projectVO.setUpdatedBy(CurrentUserService.getUserModel().getId());
 		projectVO.setCreatedDate(CommonUtil.dateNow());
+		projectVO.setUpdatedDate(CommonUtil.dateNow());
 		projectModel = populateVOIntoModel(projectVO, projectModel);
 		projectModel = projectDao.createProject(projectModel);
 		return populateModelIntoVO(projectVO, projectModel);
@@ -76,6 +78,8 @@ public class ProjectService {
      * @return ProjectModel : new updated reference of ProjectModel
 	 */
 	public ProjectVO updateProject(ProjectVO projectVO) {
+		projectVO.setUpdatedBy(CurrentUserService.getUserModel().getId());
+		projectVO.setUpdatedDate(CommonUtil.dateNow());
 		ProjectModel projectModel =  new ProjectModel();
 		projectModel = populateVOIntoModel(projectVO, projectModel);
 		projectModel = projectDao.updateProject(projectModel);
@@ -99,8 +103,10 @@ public class ProjectService {
 	 * @return List : List of project models
 	 */
 	@SuppressWarnings("rawtypes")
-	public List getAllProjects() {
-		return projectDao.getAllProjects();
+	public List getMyProjects() {
+		ProjectModel projectModel =  new ProjectModel();
+		projectModel.setCreatedBy(CurrentUserService.getUserModel().getId());
+		return projectDao.getMyProjects(projectModel);
 	}
 
 	/**
@@ -116,5 +122,6 @@ public class ProjectService {
 		projectModel = projectDao.getProjectDetails(projectModel);
 		return populateModelIntoVO(projectVO, projectModel);
 	}
+
 	
 }

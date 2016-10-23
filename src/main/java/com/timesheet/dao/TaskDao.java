@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.timesheet.dao.model.ProjectModel;
 import com.timesheet.dao.model.Task;
+import com.timesheet.dao.model.TaskDurationModel;
 /**
  * This 
  * @author Avinash
@@ -68,15 +69,15 @@ public class TaskDao {
 	 * @param userId - user's id
 	 * @return - list of user's task
 	 */
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public List getTask(int userId){
+	@SuppressWarnings({ "unchecked" })
+	public List<Task> getTaskByUserId(int userId){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "FROM Task T WHERE T.createdBy = :id";
+			String hql = "FROM Task as t where t.createdBy = :userId";
 			Query query = session.createQuery(hql);
-			query.setParameter("id", userId);
-			List list =query.list() ;
-			 return list;
+			query.setParameter("userId", userId);
+			List<Task> listOfTask = (List<Task>) query.list();
+			return listOfTask;
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
@@ -90,14 +91,13 @@ public class TaskDao {
 	 * @param date - date   
 	 */
 	@SuppressWarnings("rawtypes")
-	public List getTaskByDate(int userId,Date date){
-		Session session = this.sessionFactory.getCurrentSession();	
-		 /*t.createdBy = :id and */
-		String hql = "FROM Task t where (DATEDIFF(DAY,DATE_ADD(createdDate,INTERVAL repeatFrequency DAY),:date) >  0)";
+	public List getTaskByDate(int userId,Long date){
+		Session session = this.sessionFactory.getCurrentSession();
+		String hql = "FROM Task as t join t.taskDurationModel td where t.createdBy = :userId AND td.date = :date";
 		try{
 			
 			Query query = session.createQuery(hql);
-			query.setParameter("id", userId);
+			query.setParameter("userId", userId);
 			query.setParameter("date", date);
 			List list = query.list();
 			return list;

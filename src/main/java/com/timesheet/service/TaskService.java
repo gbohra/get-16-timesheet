@@ -74,7 +74,7 @@ public class TaskService {
 		//convert VO to Model
 		populateVOIntoModel(taskVO);
 		 task = taskDao.createTask(task);
-		 taskDurationModel.setTaskId(task.getId());
+		 //taskDurationModel.setTaskId(task.getId());
 		 taskDurationModel = taskDurationDao.insertOnNewTaskCreation(taskDurationModel);
 		 return populateModelIntoVO(taskVO);
 	}
@@ -88,7 +88,7 @@ public class TaskService {
 		task.setRepeatFrequency(taskVO.getRepeatFrequency());
 		task.setStatus(taskVO.getStatus());
 		task.setSubTask(taskVO.getSubTask());
-		taskDurationModel.setTaskId(taskVO.getId());
+		//taskDurationModel.setTaskId(taskVO.getId());
 		taskDurationModel.setDate(taskVO.getDate());
 		taskDurationModel.setDuration(taskVO.getDuration());
 	}
@@ -112,7 +112,7 @@ public class TaskService {
 		//convert VO to Model
 				populateVOIntoModel(taskVO);
 				 task = taskDao.updateTask(task);
-				 taskDurationModel.setTaskId(task.getId());
+				 //taskDurationModel.setTaskId(task.getId());
 				 taskDurationModel.setId((taskDurationDao.getById(task.getId())).getId());
 				 taskDurationModel = taskDurationDao.update(taskDurationModel);
 				 return populateModelIntoVO(taskVO);
@@ -124,9 +124,9 @@ public class TaskService {
 	 * @param userId - user's id
 	 * @return - list of user's task
 	 */
-	@SuppressWarnings("rawtypes")
-	public List getTask(int id){
-		return taskDao.getTask(id);
+
+	public List<Task> getTaskMe(){
+		return taskDao.getTaskByUserId(CurrentUserService.getUserModel().getId());
 	}
 	/**
 	 * getting user's task by usrs's id and date 
@@ -134,7 +134,11 @@ public class TaskService {
 	 * @param date - date   
 	 */
 	@SuppressWarnings("rawtypes")
-	public List getUserByDate(int userId,Date date){
-		return taskDao.getTaskByDate(userId, date);
+	public List getTaskByDate(Long d){
+		Date date = new Date(d);
+		date.setHours(0);
+		date.setMinutes(0);
+		date.setSeconds(0);
+		return taskDao.getTaskByDate(CurrentUserService.getUserModel().getId(), date.getTime());
 	}
 }

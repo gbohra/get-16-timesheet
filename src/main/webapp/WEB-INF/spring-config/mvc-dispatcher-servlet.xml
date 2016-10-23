@@ -123,6 +123,10 @@
 		<property name="labelDao" ref="labelDao" />
 	</bean>
 	
+	<bean id="currentUserService" class="com.timesheet.service.CurrentUserService">
+		<property name="userDao" ref="userDao" />
+	</bean>
+	
 	
 
 	<bean id="transactionManager"

@@ -43,7 +43,7 @@ public class TaskDurationDao {
 	
 	public TaskDurationModel update(TaskDurationModel taskDurationModel) {
 		Session session = this.sessionFactory.getCurrentSession();
-		int taskId = taskDurationModel.getTaskId();
+		//int taskId = taskDurationModel.getTaskId();
 		Query q = session.createQuery("from TaskDurationModel where taskId=:taskId");
 		
 		String hql = "From TaskDurationModel Where taskId=:taskId";

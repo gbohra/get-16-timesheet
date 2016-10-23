@@ -67,7 +67,7 @@ public class UserController {
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(value="/{id}",method=RequestMethod.GET)
 	@ResponseBody
-	public List getUserData(@PathVariable("id")int id){
+	public UserModel getUserData(@PathVariable("id")int id){
 		//System.out.println("this is get user data");
 		//System.out.println("this is id");
 		System.out.println("this is get user contrller " + id);

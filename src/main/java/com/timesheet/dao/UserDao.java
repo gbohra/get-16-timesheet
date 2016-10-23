@@ -79,13 +79,12 @@ public class UserDao {
 	 */
 	
 	@SuppressWarnings("rawtypes")
-	public List getUserInfo(int id){
-		System.out.println("this is user dao"+id);
+	public UserModel getUserInfo(int id){
 		Session session = this.sessionFactory.getCurrentSession();
 		Query query = session.createQuery("from UserModel m where m.id=:id");
 		query.setParameter("id", id);
 		List list =  (List) query.list();  
-		return list;
+		return (UserModel) list.get(0);
 	}
 	 
 	/**
