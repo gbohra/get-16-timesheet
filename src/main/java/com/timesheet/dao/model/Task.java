@@ -47,7 +47,7 @@ public class Task {
 	@Column(name="priority")
 	private int priority;
 	
-	@OneToMany(fetch = FetchType.EAGER, mappedBy = "taskModel", cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "taskId", cascade = CascadeType.ALL)
 	private List<TaskDurationModel> taskDurationModel;
 
 	public int getId() {

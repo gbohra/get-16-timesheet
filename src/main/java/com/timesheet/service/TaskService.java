@@ -1,6 +1,8 @@
 package com.timesheet.service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import com.timesheet.dao.TaskDao;
 import com.timesheet.dao.TaskDurationDao;
 import com.timesheet.dao.model.Task;
 import com.timesheet.dao.model.TaskDurationModel;
+import com.timesheet.utill.CommonUtil;
 import com.timesheet.vo.TaskVO;
 
 @Service
@@ -74,7 +77,7 @@ public class TaskService {
 		//convert VO to Model
 		populateVOIntoModel(taskVO);
 		 task = taskDao.createTask(task);
-		 //taskDurationModel.setTaskId(task.getId());
+		 taskDurationModel.setTaskId(task.getId());
 		 taskDurationModel = taskDurationDao.insertOnNewTaskCreation(taskDurationModel);
 		 return populateModelIntoVO(taskVO);
 	}
@@ -88,7 +91,7 @@ public class TaskService {
 		task.setRepeatFrequency(taskVO.getRepeatFrequency());
 		task.setStatus(taskVO.getStatus());
 		task.setSubTask(taskVO.getSubTask());
-		//taskDurationModel.setTaskId(taskVO.getId());
+		taskDurationModel.setTaskId(task.getId());
 		taskDurationModel.setDate(taskVO.getDate());
 		taskDurationModel.setDuration(taskVO.getDuration());
 	}
@@ -112,7 +115,7 @@ public class TaskService {
 		//convert VO to Model
 				populateVOIntoModel(taskVO);
 				 task = taskDao.updateTask(task);
-				 //taskDurationModel.setTaskId(task.getId());
+				 taskDurationModel.setTaskId(task.getId());
 				 taskDurationModel.setId((taskDurationDao.getById(task.getId())).getId());
 				 taskDurationModel = taskDurationDao.update(taskDurationModel);
 				 return populateModelIntoVO(taskVO);
@@ -139,6 +142,49 @@ public class TaskService {
 		date.setHours(0);
 		date.setMinutes(0);
 		date.setSeconds(0);
-		return taskDao.getTaskByDate(CurrentUserService.getUserModel().getId(), date.getTime());
+//		return taskDao.getTaskByDate(CurrentUserService.getUserModel().getId(), date.getTime());
+		return getTasksByDate(date.getTime(), taskDao.getTaskByUserId(CurrentUserService.getUserModel().getId()));
+	}
+	
+	public List getMyTimesheet() {
+		Date date = CommonUtil.dateNow();
+		date.setDate(1);
+		date.setHours(0);
+		date.setMinutes(0);
+		date.setSeconds(0);
+		Long fromMonth = date.getTime();
+		date.setMonth(date.getMonth()+1);;
+		Long toMonth = date.getTime();
+		
+		
+//		return taskDao.getMyTimesheet(fromMonth, toMonth, CurrentUserService.getUserModel().getId());
+		return getMyTimeSheet(fromMonth, toMonth, taskDao.getTaskByUserId(CurrentUserService.getUserModel().getId()));
+	}
+	
+	
+//	Temporary method to filter tasks on date
+	public List<Task> getTasksByDate(Long date, List<Task> myTasks){
+		List<Task> filteredList = new ArrayList<Task>();
+		for (Task task : myTasks) {
+			for (TaskDurationModel taskDurationModel : task.getTaskDurationModel()) {
+				if(date.longValue() == taskDurationModel.getDate().longValue()){
+					filteredList.add(task);
+				}
+			}
+		}
+		return filteredList;
+	}
+	
+//	Temporary method to filter timesheet tasks
+	public List<Task> getMyTimeSheet(Long fromMonth, Long toMonth, List<Task> myTasks){
+		List<Task> filteredList = new ArrayList<Task>();
+		for (Task task : myTasks) {
+			for (TaskDurationModel taskDurationModel : task.getTaskDurationModel()) {
+				if(taskDurationModel.getDate().longValue() >= fromMonth.longValue() && taskDurationModel.getDate().longValue() <= toMonth.longValue()){
+					filteredList.add(task);
+				}
+			}
+		}
+		return filteredList;
 	}
 }

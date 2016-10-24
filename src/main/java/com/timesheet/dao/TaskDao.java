@@ -93,17 +93,34 @@ public class TaskDao {
 	@SuppressWarnings("rawtypes")
 	public List getTaskByDate(int userId,Long date){
 		Session session = this.sessionFactory.getCurrentSession();
-		String hql = "FROM Task as t join t.taskDurationModel td where t.createdBy = :userId AND td.date = :date";
+		String hql = "FROM Task as t where t.createdBy = :userId AND t.taskDurationModel.date = :date";
 		try{
 			
 			Query query = session.createQuery(hql);
 			query.setParameter("userId", userId);
 			query.setParameter("date", date);
-			List list = query.list();
+			List<Task> list = (List<Task>) query.list();
 			return list;
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
 		}			
+	}
+	
+	public List getMyTimesheet(Long fromMonth, Long toMonth, int userId){
+		Session session = this.sessionFactory.getCurrentSession();
+		String hql = "FROM Task as t join t.taskDurationModel td where t.createdBy = :userId AND td.date BETWEEN :fromMonth AND :toMonth";
+		try{
+			Query query = session.createQuery(hql);
+			query.setParameter("userId", userId);
+			query.setParameter("fromMonth", fromMonth);
+			query.setParameter("toMonth", toMonth);
+			List list = query.list();
+			return list;
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}		
+		
 	}
 }

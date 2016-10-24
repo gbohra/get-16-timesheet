@@ -19,14 +19,19 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 @Component
 @Table(name = "task_duration")
 public class TaskDurationModel {
+	public int getTaskId() {
+		return taskId;
+	}
+	public void setTaskId(int taskId) {
+		this.taskId = taskId;
+	}
 	@Id
 	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	@Column(name="id")
 	private int id;
 	
-	@ManyToOne
-	@JoinColumn(name="task_id")
-	private Task taskModel;
+	@Column(name="task_id")
+	private int taskId;
 	
 	@Column(name="date")
 	@JsonFormat(pattern="yyyy-MM-dd")
