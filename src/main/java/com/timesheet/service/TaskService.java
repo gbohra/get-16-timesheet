@@ -141,7 +141,7 @@ public class TaskService {
 		Date date = new Date(d);
 		date.setHours(0);
 		date.setMinutes(0);
-		date.setSeconds(0);
+		date.setSeconds(1);
 //		return taskDao.getTaskByDate(CurrentUserService.getUserModel().getId(), date.getTime());
 		return getTasksByDate(date.getTime(), taskDao.getTaskByUserId(CurrentUserService.getUserModel().getId()));
 	}
@@ -167,7 +167,8 @@ public class TaskService {
 		List<Task> filteredList = new ArrayList<Task>();
 		for (Task task : myTasks) {
 			for (TaskDurationModel taskDurationModel : task.getTaskDurationModel()) {
-				if(date.longValue() == taskDurationModel.getDate().longValue()){
+//				/1000 to remove milliseconds 
+				if((date/1000) == (taskDurationModel.getDate()/1000)){
 					filteredList.add(task);
 				}
 			}

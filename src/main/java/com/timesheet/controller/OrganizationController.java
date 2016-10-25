@@ -36,10 +36,6 @@ public class OrganizationController {
 	@RequestMapping(value="",method=RequestMethod.POST)
 	@ResponseBody
 	public Organization addOrganizaion(@RequestBody Organization organization,ServletRequest request){
-		organization.setCreatedBy(1);
-		organization.setUpdatedBy(1);
-		System.out.println("this is org add "  + organization);
-		//organization.setCreatedBy(new TokenData(request).getUserId());
 		return organizationService.addOrganizaion(organization);
 	}
 	/**

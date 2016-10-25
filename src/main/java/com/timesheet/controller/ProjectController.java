@@ -82,7 +82,7 @@ public class ProjectController {
 //			System.out.println(bindingResult.getAllErrors().get(0));
 			return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.UNPROCESSABLE_ENTITY);
 		} else {
-			return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.OK);
+			return new ResponseEntity<ProjectVO>(projectService.createProject(projectVO), HttpStatus.OK);
 		}
 	}
 	/**
@@ -91,22 +91,15 @@ public class ProjectController {
 	 * @param id : id of project to be updated
 	 * @return ResponseEntity<String>
 	 */
-	@RequestMapping(method = RequestMethod.PUT)
+	@RequestMapping(value="/{id}",method = RequestMethod.PUT)
 	@ResponseBody
-	public ResponseEntity<ProjectVO> updateProject(@RequestBody @Validated  ProjectVO projectVOTemp , BindingResult bindingResult, ServletRequest request) {
-//		System.out.println("ProjectVOTEMP   : "+projectVOTemp.getName());
-		// Gadbad Line
-		projectVO = projectService.getProjectDetails(projectVOTemp);
-		// Gadbad Line
-//		System.out.println("3457834985743985745957349857");
-//		System.out.println("ProjectVO   :  " + projectVO.getName());
-//		System.out.println("ProjectVOTEMP   : "+projectVOTemp.getName());
+	public ResponseEntity<ProjectVO> updateProject(@RequestBody @Validated  ProjectVO projectVO , BindingResult bindingResult, ServletRequest request) {
 		if (BasicAuthorization.isProjectUpdateAllowed(projectVO, request)){
 			if (bindingResult.hasErrors()) {
-				return new ResponseEntity<ProjectVO>(projectVOTemp, HttpStatus.UNPROCESSABLE_ENTITY);
+				return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.UNPROCESSABLE_ENTITY);
 			}else{
 				// update project
-				projectVO = projectService.updateProject(projectVOTemp);
+				projectVO = projectService.updateProject(projectVO);
 				return new ResponseEntity<ProjectVO>(projectVO, HttpStatus.OK);
 			}
 		}else{

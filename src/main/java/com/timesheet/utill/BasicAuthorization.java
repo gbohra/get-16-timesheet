@@ -55,8 +55,8 @@ public final class BasicAuthorization {
 	public static boolean isProjectReadAllowed(ProjectVO projectVO, ServletRequest request){
 		setRequest(request);
 		boolean isAllowed = false;
-//		isAllowed = (tokenInfo.getId() == projectVO.getCreatedBy()); /* || user is a co-owner of project || user is a member of the project*/
-		return true;
+		isAllowed = (tokenInfo.getId() == projectVO.getCreatedBy()); /* || user is a co-owner of project || user is a member of the project*/
+		return isAllowed;
 	}
 
 }

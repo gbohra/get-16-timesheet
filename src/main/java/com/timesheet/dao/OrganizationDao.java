@@ -46,12 +46,12 @@ public class OrganizationDao {
 	 * @return List of organization
 	 */
 	@SuppressWarnings("rawtypes")
-	public List getOrganizations(){
+	public List getOrganizations(int userId){
 		Session session = this.sessionFactory.getCurrentSession();
 		try{
-			String hql = "From Organization";
+			String hql = "From Organization where createdBy = :userId";
 			Query query = session.createQuery(hql);
-//			query.setParameter("user_id", id);
+			query.setParameter("userId", userId);
 			System.out.println(query.list());
 			List list = query.list() ;
 			

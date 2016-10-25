@@ -2,8 +2,6 @@ package com.timesheet.vo;
 
 import java.util.Date;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import org.springframework.stereotype.Component;
 
 @Component

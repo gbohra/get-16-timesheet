@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.timesheet.dao.OrganizationDao;
 import com.timesheet.dao.model.Organization;
+import com.timesheet.utill.CommonUtil;
 
 @Service
 public class OrganizationService {
@@ -37,6 +38,9 @@ public class OrganizationService {
 	 * @param organization
 	 */
 	public Organization addOrganizaion(Organization organization){
+		organization.setCreatedBy(CurrentUserService.getUserModel().getId());
+		organization.setUpdatedBy(CurrentUserService.getUserModel().getId());
+		organization.setCreatedDate(CommonUtil.dateNow());
 		return organizationDao.addOrganization(organization);
 	}
 	
@@ -47,7 +51,7 @@ public class OrganizationService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Organization> getOrganizations(){
-		return organizationDao.getOrganizations();
+		return organizationDao.getOrganizations(CurrentUserService.getUserModel().getId());
 	}
 	
 	/**
@@ -64,7 +68,6 @@ public class OrganizationService {
 	 * @param id -- user's id
 	 * @return List of Organization
 	 */
-	@SuppressWarnings("unchecked")
 	public Organization getOrganization(int id){
 		return organizationDao.getOrganization(id);
 	}
